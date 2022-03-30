@@ -15,3 +15,8 @@ class MaterialScreen extends MaterialsState {
       this.type,
       this.unit});
 }
+
+class MaterialCreateState extends MaterialsState {
+  final String message;
+  MaterialCreateState({required this.message});
+}

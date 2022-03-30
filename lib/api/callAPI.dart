@@ -13,9 +13,7 @@ class CallAPI {
     if (data.statusCode == 200) {
       return data.body;
     } else {
-      return {
-        "loginStatus": false,
-      };
+      return '';
     }
   }
 

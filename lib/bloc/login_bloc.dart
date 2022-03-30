@@ -31,21 +31,26 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           "password": event.passWord
         };
         var res = await CallAPI().Post(login, params);
-        var loginInfo = jsonDecode(res);
-        if (loginInfo['loginStatus']) {
-          status = loginInfo['loginStatus'];
-          data = loginInfo;
-          final prefs = await SharedPreferences.getInstance();
-          if (data['id_restaurant'] is Null) {
-            id_restaurant = "01";
+        if (res != '') {
+          var loginInfo = jsonDecode(res);
+          if (loginInfo['loginStatus']) {
+            status = loginInfo['loginStatus'];
+            data = loginInfo;
+            final prefs = await SharedPreferences.getInstance();
+            if (data['id_restaurant'] is Null) {
+              id_restaurant = "01";
+            } else {
+              id_restaurant = data['id_restaurant'];
+            }
+            await prefs.setString(idRestaurant, id_restaurant);
+            await prefs.setString(idUser, data['id_user']);
+            await prefs.setString(nameUser, data['name']);
+            await prefs.setString(role, data['role'].toString());
+            message = "Đăng nhập thành công";
           } else {
-            id_restaurant = data['id_restaurant'];
+            status = false;
+            message = "Đăng nhập thất bại";
           }
-          await prefs.setString(idRestaurant, id_restaurant);
-          await prefs.setString(idUser, data['id_user']);
-          await prefs.setString(nameUser, data['name']);
-          await prefs.setString(role, data['role'].toString());
-          message = "Đăng nhập thành công";
         } else {
           status = false;
           message = "Đăng nhập thất bại";

@@ -8,3 +8,13 @@ class MaterialCheckEvent extends MaterialEvent {
   MaterialCheckEvent(
       {required this.isMaterialAll, required this.isMaterialRestaurant});
 }
+
+class MaterialCreate extends MaterialEvent {
+  final String materialName;
+  final String materialType;
+  final String materialUnit;
+  MaterialCreate(
+      {required this.materialName,
+      required this.materialType,
+      required this.materialUnit});
+}

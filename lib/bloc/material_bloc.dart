@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:chayxanhapp/api/api.dart';
@@ -26,6 +27,21 @@ class MaterialBloc extends Bloc<MaterialEvent, MaterialsState> {
             isMaterialRestaurant: event.isMaterialRestaurant,
             type: type,
             unit: unit));
+      }
+      if (event is MaterialCreate) {
+        emit(MaterialCreateState(message: 'is creating ....'));
+        var params = {
+          "name": event.materialName,
+          "type": event.materialType,
+          "unit": event.materialUnit
+        };
+        var res = await CallAPI().Post(createMaterial, params);
+        if (res != '') {
+          res = json.decode(res);
+          emit(MaterialCreateState(message: 'Created'));
+        } else {
+          emit(MaterialCreateState(message: 'Create fail'));
+        }
       }
     });
   }
