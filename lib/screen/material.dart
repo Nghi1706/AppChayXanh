@@ -40,9 +40,13 @@ class _MaterialCEDState extends State<MaterialCED> {
     bool isMaterialrestaurant = widget.isMaterialRestaurant;
     List type = [];
     List unit = [];
+    List material = [];
     String typeName = 'gia vị';
     String unitName = 'kg';
     String materialName = '';
+    String materialEditName = '';
+    String materialID = '';
+    String materialEditStatus = 'Edit material';
     String statusMaterial = 'Create material';
     return Scaffold(
         appBar: AppBar(
@@ -50,29 +54,241 @@ class _MaterialCEDState extends State<MaterialCED> {
           centerTitle: true,
         ),
         body: isMaterialAll
+            // material all
             ? Container(
                 padding: EdgeInsets.all(10),
                 child: Column(children: [
                   Expanded(
-                      child: SingleChildScrollView(
-                    child: Column(
-                      children: const [
-                        Text(
-                          "data",
-                          style: TextStyle(fontSize: 50),
-                        ),
-                      ],
+                    child: BlocBuilder<MaterialBloc, MaterialsState>(
+                      bloc: materialBloc,
+                      builder: (context, state) {
+                        if (state is MaterialScreen) {
+                          material = state.material;
+                        }
+                        return ListView.builder(
+                          itemCount: material.length,
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              child: Card(
+                                child: ListTile(
+                                  title: Text(material[index]['name']),
+                                  subtitle: Text(material[index]['type']),
+                                ),
+                              ),
+                              onTap: () {
+                                typeName = material[index]['type'];
+                                materialEditName = material[index]['name'];
+                                materialID = material[index]['_id'];
+                                unitName = material[index]['unit'];
+                                ;
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return BlocBuilder<MaterialBloc,
+                                            MaterialsState>(
+                                        bloc: materialBloc,
+                                        builder: (context, state) {
+                                          if (state is MaterialScreen) {
+                                            type = state.type;
+                                            unit = state.unit;
+                                          }
+                                          if (state is MaterialEditState) {
+                                            materialEditStatus = state.message;
+                                          }
+                                          if (state is MaterialDeleteState) {
+                                            materialEditStatus = state.message;
+                                          }
+                                          if (state
+                                              is MaterialAddToRestaurantState) {
+                                            materialEditStatus = state.message;
+                                          }
+                                          return AlertDialog(
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20))),
+                                            title: Text(materialEditStatus),
+                                            content: SingleChildScrollView(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  const Text("id_material"),
+                                                  Text(materialID),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  TextField(
+                                                    decoration: InputDecoration(
+                                                        border:
+                                                            OutlineInputBorder(),
+                                                        hintText:
+                                                            materialEditName),
+                                                    onChanged: (value) => {
+                                                      materialEditName = value,
+                                                    },
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Text("Chọn loại nguyên liệu"),
+                                                  DropdownButtonFormField(
+                                                    items:
+                                                        type.map((items_type) {
+                                                      return DropdownMenuItem<
+                                                          String>(
+                                                        value:
+                                                            items_type['type'],
+                                                        child: Text(
+                                                          items_type['type'],
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: Colors
+                                                                      .green),
+                                                        ),
+                                                      );
+                                                    }).toList(),
+                                                    onChanged: (value) {
+                                                      typeName =
+                                                          value.toString();
+                                                    },
+                                                    value: typeName,
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  const Text(
+                                                      "Chọn đơn vị tính"),
+                                                  DropdownButtonFormField(
+                                                    items: unit.map((unit) {
+                                                      return DropdownMenuItem<
+                                                          String>(
+                                                        value: unit['unit'],
+                                                        child: Text(
+                                                          unit['unit'],
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: Colors
+                                                                      .green),
+                                                        ),
+                                                      );
+                                                    }).toList(),
+                                                    onChanged: (value) {
+                                                      unitName =
+                                                          value.toString();
+                                                    },
+                                                    value: unitName,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            actionsOverflowButtonSpacing: 20,
+                                            actions: [
+                                              ElevatedButton(
+                                                style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          Color.fromARGB(255,
+                                                              168, 196, 13)),
+                                                  shape: MaterialStateProperty.all(
+                                                      const RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          20)))),
+                                                ),
+                                                child: const Text(
+                                                    "Add Restaurant"),
+                                                onPressed: () {
+                                                  materialBloc.add(MaterialAdd(
+                                                      materialId: materialID));
+                                                },
+                                              ),
+                                              ElevatedButton(
+                                                style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          Color.fromARGB(255,
+                                                              248, 54, 40)),
+                                                  shape: MaterialStateProperty.all(
+                                                      const RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          20)))),
+                                                ),
+                                                child: const Text("Delete"),
+                                                onPressed: () {
+                                                  materialBloc.add(
+                                                      MaterialDelete(
+                                                          materialId:
+                                                              materialID));
+                                                  setState(() {
+                                                    materialBloc
+                                                        .add(MaterialCheckEvent(
+                                                      isMaterialAll:
+                                                          widget.isMaterialAll,
+                                                      isMaterialRestaurant: widget
+                                                          .isMaterialRestaurant,
+                                                    ));
+                                                  });
+                                                },
+                                              ),
+                                              ElevatedButton(
+                                                style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          Colors.green),
+                                                  shape: MaterialStateProperty.all(
+                                                      const RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          20)))),
+                                                ),
+                                                child: const Text("Change"),
+                                                onPressed: () {
+                                                  materialBloc.add(MaterialEdit(
+                                                      materialId: materialID,
+                                                      materialName:
+                                                          materialEditName,
+                                                      materialType: typeName,
+                                                      materialUnit: unitName));
+                                                  setState(() {
+                                                    materialBloc
+                                                        .add(MaterialCheckEvent(
+                                                      isMaterialAll:
+                                                          widget.isMaterialAll,
+                                                      isMaterialRestaurant: widget
+                                                          .isMaterialRestaurant,
+                                                    ));
+                                                  });
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        });
+                                  },
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
                     ),
-                  )),
+                  ),
                   Container(
                       height: 50,
                       child: Row(
                         children: [
                           Expanded(
-                            child: Text(
-                              statusMaterial,
-                              style: TextStyle(fontSize: 20, color: Colors.red),
-                            ),
+                            child: Container(),
+                            flex: 3,
                           ),
                           InkWell(
                               child: Container(
@@ -204,6 +420,15 @@ class _MaterialCEDState extends State<MaterialCED> {
                                                               typeName,
                                                           materialUnit:
                                                               unitName));
+                                                  setState(() {
+                                                    materialBloc
+                                                        .add(MaterialCheckEvent(
+                                                      isMaterialAll:
+                                                          widget.isMaterialAll,
+                                                      isMaterialRestaurant: widget
+                                                          .isMaterialRestaurant,
+                                                    ));
+                                                  });
                                                 },
                                               ),
                                             ],
@@ -216,8 +441,234 @@ class _MaterialCEDState extends State<MaterialCED> {
                       )),
                 ]),
               )
+            // material restaurant
             : Container(
-                child: Text("CED Res material here !"),
+                padding: EdgeInsets.all(10),
+                child: Column(children: [
+                  Expanded(
+                    child: BlocBuilder<MaterialBloc, MaterialsState>(
+                      bloc: materialBloc,
+                      builder: (context, state) {
+                        if (state is MaterialScreen) {
+                          material = state.material;
+                        }
+                        return ListView.builder(
+                          itemCount: material.length,
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              child: Card(
+                                child: ListTile(
+                                  title: Text(material[index]['name']),
+                                  subtitle: Text(material[index]['type']),
+                                ),
+                              ),
+                              onTap: () {
+                                typeName = material[index]['type'];
+                                materialEditName = material[index]['name'];
+                                materialID = material[index]['_id'];
+                                unitName = material[index]['unit'];
+                                ;
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return BlocBuilder<MaterialBloc,
+                                            MaterialsState>(
+                                        bloc: materialBloc,
+                                        builder: (context, state) {
+                                          if (state is MaterialScreen) {
+                                            type = state.type;
+                                            unit = state.unit;
+                                          }
+                                          if (state is MaterialEditState) {
+                                            materialEditStatus = state.message;
+                                          }
+                                          if (state is MaterialDeleteState) {
+                                            materialEditStatus = state.message;
+                                          }
+                                          return AlertDialog(
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20))),
+                                            title: Text(materialEditStatus),
+                                            content: SingleChildScrollView(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  const Text("id_material"),
+                                                  Text(materialID),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  TextField(
+                                                    decoration: InputDecoration(
+                                                        border:
+                                                            OutlineInputBorder(),
+                                                        hintText:
+                                                            materialEditName),
+                                                    onChanged: (value) => {
+                                                      materialEditName = value,
+                                                    },
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Text("Chọn loại nguyên liệu"),
+                                                  DropdownButtonFormField(
+                                                    items:
+                                                        type.map((items_type) {
+                                                      return DropdownMenuItem<
+                                                          String>(
+                                                        value:
+                                                            items_type['type'],
+                                                        child: Text(
+                                                          items_type['type'],
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: Colors
+                                                                      .green),
+                                                        ),
+                                                      );
+                                                    }).toList(),
+                                                    onChanged: (value) {
+                                                      typeName =
+                                                          value.toString();
+                                                    },
+                                                    value: typeName,
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  const Text(
+                                                      "Chọn đơn vị tính"),
+                                                  DropdownButtonFormField(
+                                                    items: unit.map((unit) {
+                                                      return DropdownMenuItem<
+                                                          String>(
+                                                        value: unit['unit'],
+                                                        child: Text(
+                                                          unit['unit'],
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: Colors
+                                                                      .green),
+                                                        ),
+                                                      );
+                                                    }).toList(),
+                                                    onChanged: (value) {
+                                                      unitName =
+                                                          value.toString();
+                                                    },
+                                                    value: unitName,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            actionsOverflowButtonSpacing: 20,
+                                            actions: [
+                                              ElevatedButton(
+                                                style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          Color.fromARGB(255,
+                                                              248, 54, 40)),
+                                                  shape: MaterialStateProperty.all(
+                                                      const RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          20)))),
+                                                ),
+                                                child: const Text("Delete"),
+                                                onPressed: () {
+                                                  materialBloc.add(
+                                                      MaterialDelete(
+                                                          materialId:
+                                                              materialID));
+                                                  setState(() {
+                                                    materialBloc
+                                                        .add(MaterialCheckEvent(
+                                                      isMaterialAll:
+                                                          widget.isMaterialAll,
+                                                      isMaterialRestaurant: widget
+                                                          .isMaterialRestaurant,
+                                                    ));
+                                                  });
+                                                },
+                                              ),
+                                              ElevatedButton(
+                                                style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          Colors.green),
+                                                  shape: MaterialStateProperty.all(
+                                                      const RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          20)))),
+                                                ),
+                                                child: const Text("Change"),
+                                                onPressed: () {
+                                                  materialBloc.add(MaterialEdit(
+                                                      materialId: materialID,
+                                                      materialName:
+                                                          materialEditName,
+                                                      materialType: typeName,
+                                                      materialUnit: unitName));
+                                                  setState(() {
+                                                    materialBloc
+                                                        .add(MaterialCheckEvent(
+                                                      isMaterialAll:
+                                                          widget.isMaterialAll,
+                                                      isMaterialRestaurant: widget
+                                                          .isMaterialRestaurant,
+                                                    ));
+                                                  });
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        });
+                                  },
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                  Container(
+                      height: 50,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Container(),
+                            flex: 3,
+                          ),
+                          InkWell(
+                              child: Container(
+                                padding: EdgeInsets.all(10),
+                                decoration: const BoxDecoration(
+                                    color: Colors.green,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20))),
+                                margin: const EdgeInsets.only(right: 10),
+                                child: const Text(
+                                  "Add Material",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                              onTap: () {}),
+                        ],
+                      )),
+                ]),
               ));
   }
 }

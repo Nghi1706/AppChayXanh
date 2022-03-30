@@ -33,10 +33,22 @@ class CallAPI {
   }
 
   Put(url, params) async {
-    return params;
+    var urls = api + url;
+    var data = await http.put(Uri.parse(urls), body: params);
+    if (data.statusCode == 200) {
+      return data.body;
+    } else {
+      return '';
+    }
   }
 
   Delete(url, params) async {
-    return params;
+    var urls = api + url;
+    var data = await http.delete(Uri.parse(urls), body: params);
+    if (data.statusCode == 200) {
+      return data.body;
+    } else {
+      return '';
+    }
   }
 }

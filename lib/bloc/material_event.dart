@@ -18,3 +18,27 @@ class MaterialCreate extends MaterialEvent {
       required this.materialType,
       required this.materialUnit});
 }
+
+class MaterialEdit extends MaterialEvent {
+  final String materialId;
+  final String materialName;
+  final String materialType;
+  final String materialUnit;
+  MaterialEdit(
+      {required this.materialId,
+      required this.materialName,
+      required this.materialType,
+      required this.materialUnit});
+}
+
+class MaterialDelete extends MaterialEvent {
+  final String materialId;
+
+  MaterialDelete({required this.materialId});
+}
+
+class MaterialAdd extends MaterialEvent {
+  final String materialId;
+
+  MaterialAdd({required this.materialId});
+}
