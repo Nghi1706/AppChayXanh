@@ -42,3 +42,19 @@ class MaterialAdd extends MaterialEvent {
 
   MaterialAdd({required this.materialId});
 }
+
+class RestaurantMaterialUpdate extends MaterialEvent {
+  final String restaurantMaterialId;
+  final double restaurantMaterialOldAvailable;
+  final double restaurantMaterialNewAvailable;
+  RestaurantMaterialUpdate(
+      {required this.restaurantMaterialId,
+      required this.restaurantMaterialOldAvailable,
+      required this.restaurantMaterialNewAvailable});
+}
+
+class RestaurantMaterialDelete extends MaterialEvent {
+  final String materialId;
+
+  RestaurantMaterialDelete({required this.materialId});
+}

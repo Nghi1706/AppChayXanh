@@ -27,13 +27,26 @@ class MaterialBloc extends Bloc<MaterialEvent, MaterialsState> {
           unit = jsonDecode(unit);
           material = await CallAPI().Get(getMaterials, '');
           material = jsonDecode(material);
+          emit(AllMaterialScreen(
+              isMaterialAll: event.isMaterialAll,
+              isMaterialRestaurant: event.isMaterialRestaurant,
+              type: type,
+              unit: unit,
+              material: material));
+        } else if (event.isMaterialRestaurant) {
+          type = await CallAPI().Get(getTypeMaterial, '');
+          type = jsonDecode(type);
+          unit = await CallAPI().Get(units, '');
+          unit = jsonDecode(unit);
+          final prefs = await SharedPreferences.getInstance();
+          String restaurantID = prefs.getString(idRestaurant).toString();
+          var paramsMaterials = {"Restaurants": restaurantID};
+          material =
+              await CallAPI().Get(getMaterialsRestaurant, paramsMaterials);
+          material = jsonDecode(material);
+          emit(RestaurantMaterialScreen(
+              type: type, unit: unit, material: material));
         }
-        emit(MaterialScreen(
-            isMaterialAll: event.isMaterialAll,
-            isMaterialRestaurant: event.isMaterialRestaurant,
-            type: type,
-            unit: unit,
-            material: material));
       }
       if (event is MaterialCreate) {
         emit(MaterialCreateState(message: 'is creating ....'));
@@ -81,9 +94,47 @@ class MaterialBloc extends Bloc<MaterialEvent, MaterialsState> {
         emit(MaterialAddToRestaurantState(message: "Adding !"));
         final prefs = await SharedPreferences.getInstance();
         String restaurantID = prefs.getString(idRestaurant).toString();
-        log(restaurantID);
+        var paramsAdd = {
+          "Materials": event.materialId,
+          "Restaurants": restaurantID
+        };
+        var resADD = await CallAPI().Post(createMaterialsRestaurant, paramsAdd);
+        if (resADD != '') {
+          resADD = json.decode(resADD);
+          emit(MaterialAddToRestaurantState(message: "Added !"));
+        } else {
+          emit(MaterialAddToRestaurantState(message: "Add fail !"));
+        }
+      }
+      if (event is RestaurantMaterialUpdate) {
+        emit(RestaurantMaterialUpdateToRestaurantState(message: "Updating !"));
+        var paramsUpdate = {
+          "id": event.restaurantMaterialId,
+          "available_old": event.restaurantMaterialOldAvailable.toString(),
+          "available_new": event.restaurantMaterialNewAvailable.toString()
+        };
+        var resUpdate =
+            await CallAPI().Put(updateMaterialsRestaurant, paramsUpdate);
+        if (resUpdate != '') {
+          resUpdate = json.decode(resUpdate);
+          emit(RestaurantMaterialUpdateToRestaurantState(message: "Updated !"));
+        } else {
+          emit(RestaurantMaterialUpdateToRestaurantState(
+              message: "Update fail !"));
+        }
+      }
+      if (event is RestaurantMaterialDelete) {
         log(event.materialId);
-        // var paramsAdd = {"id": event.materialId};
+        emit(RestaurantMaterialDeleteState(message: "Deleting !"));
+        var paramsDelete = {"id": event.materialId};
+        var resDelete =
+            await CallAPI().Delete(deleteMaterialsRestaurant, paramsDelete);
+        if (resDelete != '') {
+          resDelete = json.decode(resDelete);
+          emit(RestaurantMaterialDeleteState(message: "Deleted !"));
+        } else {
+          emit(RestaurantMaterialDeleteState(message: "Delete fail !"));
+        }
       }
     });
   }

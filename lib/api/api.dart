@@ -23,6 +23,8 @@ const deleteMaterial = '/api/deleteMaterial';
 //material_restaurant
 const createMaterialsRestaurant = '/api/createMaterials_Restaurant';
 const deleteMaterialsRestaurant = '/api/deleteMaterials_Restaurant';
+const getMaterialsRestaurant = '/api/getMaterials_Restaurant';
+const updateMaterialsRestaurant = '/api/updateMaterials_Restaurant';
 // product_material
 const createProductsMaterials = '/api/createProducts_Materials';
 const deleteProductsMaterials = '/api/deleteProducts_Materials';

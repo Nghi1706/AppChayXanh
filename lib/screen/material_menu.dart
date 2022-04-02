@@ -55,7 +55,7 @@ class MaterialMenu extends StatelessWidget {
               },
               child: const ButtonCustom(
                 icon: Icons.other_houses,
-                text: "Thêm nguyên liệu nhà hàng",
+                text: "Nguyên liệu nhà hàng",
               )),
         ],
       ),
