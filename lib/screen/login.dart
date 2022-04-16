@@ -79,7 +79,22 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         );
                       }
+
                       loginMessage = state.message;
+                    }
+                    if (state is Logging) {
+                      showLoaderDialog(context, "Logging !");
+                    }
+                    if (state is LogSuccess) {
+                      Navigator.pop(context);
+                    }
+                    if (state is LogFail) {
+                      Navigator.pop(context);
+                      showDialogResult(context, "Log fail");
+                    }
+                    if (state is PleaseAddUNorPASS) {
+                      showDialogResult(
+                          context, "Is missing phone or password!");
                     }
                   },
                   child: OutlinedButton(
@@ -90,14 +105,51 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                       child: const Text("Login")),
                 ),
-                BlocBuilder<LoginBloc, LoginState>(
-                  builder: (context, state) {
-                    return Text(loginMessage);
-                  },
-                )
+                // BlocBuilder<LoginBloc, LoginState>(
+                //   builder: (context, state) {
+                //     return Text(loginMessage);
+                //   },
+                // )
               ],
             ),
           )),
+    );
+  }
+
+  showLoaderDialog(BuildContext context, String data) {
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(margin: EdgeInsets.only(left: 7), child: Text(data)),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  showDialogResult(BuildContext context, String data) {
+    AlertDialog alert = AlertDialog(
+      content: Text(data),
+      actions: [
+        OutlinedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("ok"))
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }

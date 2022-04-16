@@ -23,8 +23,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       if (event.phoneNumber.length == 0 || event.passWord.length == 0) {
         status = false;
         message = "Vui lòng điền đủ thông tin";
+        emit(PleaseAddUNorPASS());
+        log("abc");
       } else {
         message = 'Đang kiểm tra đăng nhập !';
+        emit(Logging());
         emit(LoginStatus(status: status, message: message));
         var params = {
           "phoneNumber": event.phoneNumber,
@@ -47,11 +50,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             await prefs.setString(nameUser, data['name']);
             await prefs.setString(role, data['role'].toString());
             message = "Đăng nhập thành công";
+            emit(LogSuccess());
           } else {
             status = false;
             message = "Đăng nhập thất bại";
+            emit(LogFail());
           }
         } else {
+          emit(LogFail());
           status = false;
           message = "Đăng nhập thất bại";
         }
