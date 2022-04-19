@@ -58,6 +58,55 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
           emit(ProductCreateFail());
         }
       }
+      if (event is ProductFetch) {
+        var res = await CallAPI().Get(getProducts, "");
+        res = json.decode(res);
+        emit(ProductFetchState(data: res));
+      }
+      if (event is ProductFetchMaterial) {
+        var params = {"Products": event.idProduct};
+        var res = await CallAPI().Get(getProductsMaterials, params);
+        res = json.decode(res);
+        var material = [];
+        var productMaterial = {
+          "_id": res[0]['_id'],
+        };
+        var product = {
+          "Products": res[0]["Products"]['_id'],
+          "name": res[0]["Products"]['name'],
+          "cost": res[0]["Products"]['cost'].toString(),
+          "status": res[0]["Products"]['status'].toString(),
+          "comment": res[0]["Products"]['comment'],
+        };
+        for (var i = 0; i < res.length; i++) {
+          material.add({
+            "Materials": res[i]['Materials']['_id'],
+            "name": res[i]["Materials"]['name'],
+            "unit": res[i]["Materials"]['unit'],
+            "value": res[i]['value'].toString()
+          });
+        }
+        var data = {
+          "_id": res[0]['_id'],
+          "Products": product,
+          "Materials": material
+        };
+        emit(ProductFetchMaterialState(data: data));
+      }
+      if (event is ProductUpdate) {
+        log(event.params.toString());
+        emit(ProductIsUpdating());
+        log("is updating!");
+        var res = await CallAPI().Put(updateProduct, event.params);
+        res = json.decode(res);
+        if (res != '') {
+          emit(ProductUpdated());
+          log("updated");
+        } else {
+          emit(ProductUpdateFail());
+          log("fail");
+        }
+      }
     });
   }
 }

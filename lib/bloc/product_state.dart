@@ -15,6 +15,22 @@ class ProductCreate extends ProductState {
   ProductCreate({required this.status});
 }
 
+class ProductFetchState extends ProductState {
+  final List data;
+  ProductFetchState({required this.data});
+}
+
+class ProductFetchMaterialState extends ProductState {
+  final data;
+  ProductFetchMaterialState({required this.data});
+}
+
+class ProductIsUpdating extends ProductState {}
+
+class ProductUpdated extends ProductState {}
+
+class ProductUpdateFail extends ProductState {}
+
 class ProductIsCreating extends ProductState {}
 
 class ProductCreated extends ProductState {}

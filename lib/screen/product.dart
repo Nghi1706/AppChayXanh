@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:chayxanhapp/bloc/product_bloc.dart';
 import 'package:chayxanhapp/const/data.dart';
+import 'package:chayxanhapp/screen/productInfo.dart';
 import 'package:chayxanhapp/widget/addProduct.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,12 +25,16 @@ class _ProductScreenState extends State<ProductScreen> {
     switch (widget.role) {
       case 0:
         productBloc.add(ProductCheck(role: 0));
+        productBloc.add(ProductFetch());
         break;
       case 1:
         productBloc.add(ProductCheck(role: 1));
+        productBloc.add(ProductFetch());
+
         break;
       case 2:
         productBloc.add(ProductCheck(role: 2));
+        productBloc.add(ProductFetch());
         break;
       default:
     }
@@ -37,6 +44,20 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     final int role = widget.role;
+    checkColor(String number) {
+      int numberColor = int.parse(number);
+      log(number);
+      if (numberColor == 0) {
+        return Colors.yellow[200];
+      } else if (numberColor == -1) {
+        return Colors.red[200];
+      } else if (numberColor == 1) {
+        return Colors.green[200];
+      } else if (numberColor == 2) {
+        return Colors.blue[200];
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Product"),
@@ -54,21 +75,51 @@ class _ProductScreenState extends State<ProductScreen> {
                           product = state.product;
                           material = state.material;
                         }
+                        if (state is ProductFetchState) {
+                          product = state.data;
+                          log(product.toString());
+                        }
                         return ListView.builder(
                             itemCount: product.length,
                             itemBuilder: (context, index) {
                               return InkWell(
-                                child: Text(index.toString()),
+                                child: Card(
+                                  color: checkColor(
+                                      product[index]['status'].toString()),
+                                  child: ListTile(
+                                    title: Text(product[index]['name']),
+                                    subtitle:
+                                        Text(product[index]['cost'].toString()),
+                                  ),
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute<void>(
+                                      builder: (BuildContext context) =>
+                                          BlocProvider(
+                                        create: (context) => ProductBloc(),
+                                        child: ProductInfo(
+                                          idProduct: product[index]['_id'],
+                                          role: role,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
                               );
                             });
                       })),
-              (role == 0)
-                  ? Container(
+              (role != 0)
+                  ? Container()
+                  : SizedBox(
                       height: 50,
                       child: Row(
                         children: [
                           Expanded(
-                            child: Container(),
+                            child: Container(
+                              child: Column(),
+                            ),
                             flex: 3,
                           ),
                           InkWell(
@@ -98,8 +149,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                     ));
                               }),
                         ],
-                      ))
-                  : Container(),
+                      )),
             ],
           )),
     );

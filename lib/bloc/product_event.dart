@@ -11,3 +11,15 @@ class ProductAdd extends ProductEvent {
   final params;
   ProductAdd({required this.params});
 }
+
+class ProductUpdate extends ProductEvent {
+  final params;
+  ProductUpdate({required this.params});
+}
+
+class ProductFetch extends ProductEvent {}
+
+class ProductFetchMaterial extends ProductEvent {
+  final String idProduct;
+  ProductFetchMaterial({required this.idProduct});
+}

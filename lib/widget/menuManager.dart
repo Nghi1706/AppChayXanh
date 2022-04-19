@@ -1,5 +1,5 @@
 import 'package:chayxanhapp/bloc/product_bloc.dart';
-import 'package:chayxanhapp/screen/product_menu.dart';
+import 'package:chayxanhapp/screen/productInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -7,6 +7,7 @@ import '../bloc/login_bloc.dart';
 import '../bloc/material_bloc.dart';
 import '../screen/login.dart';
 import '../screen/material_menu.dart';
+import '../screen/product.dart';
 
 class MenuManager extends StatelessWidget {
   final String restaurantName;
@@ -157,7 +158,9 @@ class MenuManager extends StatelessWidget {
                           MaterialPageRoute<void>(
                             builder: (BuildContext context) => BlocProvider(
                               create: (context) => ProductBloc(),
-                              child: const ProductMenu(),
+                              child: const ProductScreen(
+                                role: 1,
+                              ),
                             ),
                           ));
                     }),

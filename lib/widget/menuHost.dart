@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/login_bloc.dart';
+import '../bloc/product_bloc.dart';
 import '../screen/login.dart';
+import '../screen/product.dart';
 
 class MenuHost extends StatelessWidget {
   final String restaurantName;
@@ -115,31 +117,42 @@ class MenuHost extends StatelessWidget {
                   ),
                 ),
                 InkWell(
-                  hoverColor: Colors.orange,
-                  splashColor: Colors.red,
-                  focusColor: Colors.yellow,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.green,
-                        border: Border.all(color: Colors.black, width: 1),
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(
-                          Icons.food_bank_outlined,
-                          size: 50,
-                          color: Colors.black,
-                        ),
-                        Text("Product"),
-                      ],
+                    hoverColor: Colors.orange,
+                    splashColor: Colors.red,
+                    focusColor: Colors.yellow,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.green,
+                          border: Border.all(color: Colors.black, width: 1),
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(
+                            Icons.food_bank_outlined,
+                            size: 50,
+                            color: Colors.black,
+                          ),
+                          Text("Product"),
+                        ],
+                      ),
                     ),
-                  ),
-                  customBorder: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
+                    customBorder: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) => BlocProvider(
+                              create: (context) => ProductBloc(),
+                              child: const ProductScreen(
+                                role: 2,
+                              ),
+                            ),
+                          ));
+                    }),
                 InkWell(
                   hoverColor: Colors.orange,
                   splashColor: Colors.red,
