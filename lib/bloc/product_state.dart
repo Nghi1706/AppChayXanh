@@ -16,8 +16,9 @@ class ProductCreate extends ProductState {
 }
 
 class ProductFetchState extends ProductState {
-  final List data;
-  ProductFetchState({required this.data});
+  final List product;
+  final List material;
+  ProductFetchState({required this.product, required this.material});
 }
 
 class ProductFetchMaterialState extends ProductState {

@@ -23,10 +23,18 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
             }
             break;
           case 1:
-            log(role.toString());
+            var material = await CallAPI().Get(getMaterials, "");
+            if (material != '') {
+              material = json.decode(material);
+              emit(ProductListScreenEmployee(product: [], material: material));
+            }
             break;
           case 2:
-            log(role.toString());
+            var material = await CallAPI().Get(getMaterials, "");
+            if (material != '') {
+              material = json.decode(material);
+              emit(ProductListScreenEmployee(product: [], material: material));
+            }
             break;
           default:
             log("waiting !");
@@ -59,9 +67,11 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         }
       }
       if (event is ProductFetch) {
-        var res = await CallAPI().Get(getProducts, "");
-        res = json.decode(res);
-        emit(ProductFetchState(data: res));
+        var product = await CallAPI().Get(getProducts, "");
+        product = json.decode(product);
+        var material = await CallAPI().Get(getMaterials, "");
+        material = json.decode(material);
+        emit(ProductFetchState(product: product, material: material));
       }
       if (event is ProductFetchMaterial) {
         var params = {"Products": event.idProduct};

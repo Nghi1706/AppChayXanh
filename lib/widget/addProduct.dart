@@ -6,7 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddProducts extends StatefulWidget {
   List material = [];
-  AddProducts({Key? key, required this.material}) : super(key: key);
+  int role;
+  AddProducts({Key? key, required this.material, required this.role})
+      : super(key: key);
 
   @override
   _AddProductsState createState() => _AddProductsState();
@@ -15,7 +17,7 @@ class AddProducts extends StatefulWidget {
 class _AddProductsState extends State<AddProducts> {
   ProductBloc productBloc = ProductBloc();
   List<Widget> _selection = [];
-  final List _value = [1, 2, 10, 20, 50, 100];
+  final List _value = ["1cái", "2cái", "10g", "20g", "50g", "100g"];
   List productMaterial = [];
   String name = '';
   String cost = '0';
@@ -47,6 +49,23 @@ class _AddProductsState extends State<AddProducts> {
     }
   }
 
+  _dataSelection(value) {
+    switch (value) {
+      case "1cái":
+        return 1;
+      case "2cái":
+        return 2;
+      case "10g":
+        return 0.01;
+      case "20g":
+        return 0.02;
+      case "50g":
+        return 0.05;
+      case "100g":
+        return 0.1;
+    }
+  }
+
   Widget _selectMaterial() {
     List material = widget.material;
     return productMaterial.length > 0
@@ -67,7 +86,7 @@ class _AddProductsState extends State<AddProducts> {
                                 );
                               }).toList(),
                               onChanged: (value) {
-                                item["value"] = value;
+                                item["value"] = _dataSelection(value);
                               },
                               // value: typeName,
                             )),
@@ -81,7 +100,9 @@ class _AddProductsState extends State<AddProducts> {
                                     return DropdownMenuItem<String>(
                                       value: material['_id'],
                                       child: Text(
-                                        material['name'],
+                                        material['name'] +
+                                            " " +
+                                            material['unit'],
                                         style: const TextStyle(
                                             color: Colors.green),
                                       ),
@@ -221,7 +242,11 @@ class _AddProductsState extends State<AddProducts> {
                         child: Text('create'),
                         onPressed: () {
                           var params = {
-                            "product": {"name": name, "cost": cost},
+                            "product": {
+                              "name": name,
+                              "cost": cost,
+                              "status": widget.role.toString()
+                            },
                             "materials": productMaterial
                           };
                           productBloc.add(ProductAdd(params: params));

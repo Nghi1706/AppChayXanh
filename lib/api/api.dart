@@ -29,6 +29,7 @@ const updateMaterialsRestaurant = '/api/updateMaterials_Restaurant';
 const getProductsMaterials = '/api/getProducts_Materials';
 const createProductsMaterials = '/api/createProducts_Materials';
 const deleteProductsMaterials = '/api/deleteProducts_Materials';
+const fetchProductMaterials = '/api/fetchProducts_Materials';
 // product_restaurant
 const createProductsRestaurants = '/api/createProducts_Restaurants';
 const deleteProductsRestaurant = '/api/deleteProducts_Restaurant';

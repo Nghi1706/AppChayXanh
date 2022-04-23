@@ -22,22 +22,8 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   void initState() {
     productBloc = BlocProvider.of(context);
-    switch (widget.role) {
-      case 0:
-        productBloc.add(ProductCheck(role: 0));
-        productBloc.add(ProductFetch());
-        break;
-      case 1:
-        productBloc.add(ProductCheck(role: 1));
-        productBloc.add(ProductFetch());
 
-        break;
-      case 2:
-        productBloc.add(ProductCheck(role: 2));
-        productBloc.add(ProductFetch());
-        break;
-      default:
-    }
+    productBloc.add(ProductFetch());
     super.initState();
   }
 
@@ -71,13 +57,9 @@ class _ProductScreenState extends State<ProductScreen> {
                   child: BlocBuilder<ProductBloc, ProductState>(
                       bloc: productBloc,
                       builder: (context, state) {
-                        if (state is ProductListScreenEmployee) {
+                        if (state is ProductFetchState) {
                           product = state.product;
                           material = state.material;
-                        }
-                        if (state is ProductFetchState) {
-                          product = state.data;
-                          log(product.toString());
                         }
                         return ListView.builder(
                             itemCount: product.length,
@@ -110,46 +92,45 @@ class _ProductScreenState extends State<ProductScreen> {
                               );
                             });
                       })),
-              (role != 0)
-                  ? Container()
-                  : SizedBox(
-                      height: 50,
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              child: Column(),
+              SizedBox(
+                  height: 50,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          child: Column(),
+                        ),
+                        flex: 3,
+                      ),
+                      InkWell(
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: const BoxDecoration(
+                                color: Colors.green,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                            margin: const EdgeInsets.only(right: 10),
+                            child: const Text(
+                              "New product",
+                              style: TextStyle(color: Colors.white),
                             ),
-                            flex: 3,
                           ),
-                          InkWell(
-                              child: Container(
-                                padding: EdgeInsets.all(10),
-                                decoration: const BoxDecoration(
-                                    color: Colors.green,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20))),
-                                margin: const EdgeInsets.only(right: 10),
-                                child: const Text(
-                                  "New product",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute<void>(
-                                      builder: (BuildContext context) =>
-                                          BlocProvider(
-                                        create: (context) => ProductBloc(),
-                                        child: AddProducts(
-                                          material: material,
-                                        ),
-                                      ),
-                                    ));
-                              }),
-                        ],
-                      )),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute<void>(
+                                  builder: (BuildContext context) =>
+                                      BlocProvider(
+                                    create: (context) => ProductBloc(),
+                                    child: AddProducts(
+                                      material: material,
+                                      role: role,
+                                    ),
+                                  ),
+                                ));
+                          }),
+                    ],
+                  )),
             ],
           )),
     );
