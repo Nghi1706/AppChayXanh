@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/login_bloc.dart';
 import '../bloc/material_bloc.dart';
+import '../bloc/menu_bloc.dart';
 import '../screen/login.dart';
 import '../screen/material_menu.dart';
 import '../screen/product.dart';
@@ -121,8 +122,10 @@ class MenuManager extends StatelessWidget {
                         context,
                         MaterialPageRoute<void>(
                           builder: (BuildContext context) => BlocProvider(
-                            create: (context) => MaterialBloc(),
-                            child: const MaterialMenu(),
+                            create: (context) => MenuBloc(),
+                            child: MaterialMenu(
+                              listRestaurant: [],
+                            ),
                           ),
                         ));
                   },

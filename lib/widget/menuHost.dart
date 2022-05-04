@@ -4,19 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/login_bloc.dart';
+import '../bloc/material_bloc.dart';
+import '../bloc/menu_bloc.dart';
 import '../bloc/product_bloc.dart';
 import '../screen/login.dart';
+import '../screen/material_menu.dart';
 import '../screen/product.dart';
 
 class MenuHost extends StatelessWidget {
   final String restaurantName;
   final String restaurantAddress;
   final String restaurantUser;
+  final List listRestaurant;
   const MenuHost(
       {Key? key,
       required this.restaurantAddress,
       required this.restaurantUser,
-      required this.restaurantName})
+      required this.restaurantName,
+      required this.listRestaurant})
       : super(key: key);
 
   @override
@@ -179,6 +184,18 @@ class MenuHost extends StatelessWidget {
                   customBorder: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (BuildContext context) => BlocProvider(
+                            create: (context) => MenuBloc(),
+                            child: MaterialMenu(
+                              listRestaurant: listRestaurant,
+                            ),
+                          ),
+                        ));
+                  },
                 ),
                 InkWell(
                   hoverColor: Colors.orange,

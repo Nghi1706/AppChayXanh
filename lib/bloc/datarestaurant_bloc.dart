@@ -46,13 +46,13 @@ class DatarestaurantBloc
         material_productAll = json.decode(material_productAll);
         // get information product
         for (var i = 0; i < products.length; i++) {
-          log("product" + i.toString() + ": ");
           dynamic productMaterial;
           List data = [];
           productMaterial = await CallAPI()
               .Get(getProductsMaterials, {"Products": products[i]['_id']});
           productMaterial = json.decode(productMaterial);
           for (var k = 0; k < productMaterial.length; k++) {
+            int count = 0;
             // dynamic material_product;
             double value_material_restaurant = 0.0;
             double value_materialProduct = 0.0;
@@ -67,16 +67,13 @@ class DatarestaurantBloc
               if (productMaterial[k]['Materials']['_id'] ==
                   material_productAll[d]['Materials']["_id"]) {
                 total_value_material += material_productAll[d]['value'] / 1.0;
+                count++;
               }
             }
             value_materialProduct = productMaterial[k]['value'] / 1.0;
-            data.add(value_material_restaurant /
-                total_value_material *
-                value_materialProduct /
-                total_value_material);
-            //   log(value_material_restaurant.toString());
-            //   log(value_materialProduct.toString());
-            //   log(total_value_material.toString());
+            data.add(
+                (value_material_restaurant / (total_value_material / count)) /
+                    count);
           }
           var smallestData = data[0];
 
@@ -86,11 +83,10 @@ class DatarestaurantBloc
               smallestData = data[z];
             }
           }
-          log(smallestData.toString());
           //  add data to products[i]
           products[i]['available'] = smallestData;
         }
-        log(products.toString());
+        emit(DataRes(data: products));
       }
     });
   }

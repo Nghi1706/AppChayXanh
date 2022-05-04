@@ -29,8 +29,9 @@ class _MenuState extends State<Menu> {
     String restaurantName;
     String restaurantAddress;
     String restaurantActor;
-    String role = '-1';
+    String role = '';
     Widget widget = Scaffold();
+    List listRestaurant = [];
     return BlocBuilder<MenuBloc, MenuState>(
         bloc: menuBloc,
         builder: (context, state) {
@@ -39,6 +40,7 @@ class _MenuState extends State<Menu> {
             restaurantActor = state.userName;
             restaurantAddress = state.restaurantAddress;
             role = state.role;
+            listRestaurant = state.listRestaurant;
             switch (role) {
               case '0':
                 widget = MenuEmployee(
@@ -57,7 +59,8 @@ class _MenuState extends State<Menu> {
                 widget = MenuHost(
                     restaurantAddress: restaurantAddress,
                     restaurantUser: restaurantActor,
-                    restaurantName: restaurantName);
+                    restaurantName: restaurantName,
+                    listRestaurant: listRestaurant);
                 break;
               default:
                 widget = Scaffold(
