@@ -21,9 +21,11 @@ const updateMaterial = '/api/updateMaterial';
 const getMaterials = '/api/getMaterials';
 const deleteMaterial = '/api/deleteMaterial';
 //material_restaurant
+
 const createMaterialsRestaurant = '/api/createMaterials_Restaurant';
 const deleteMaterialsRestaurant = '/api/deleteMaterials_Restaurant';
 const getMaterialsRestaurant = '/api/getMaterials_Restaurant';
+const getMaterialRestaurant = '/api/getMaterial_Restaurant';
 const updateMaterialsRestaurant = '/api/updateMaterials_Restaurant';
 // product_material
 const getProductsMaterials = '/api/getProducts_Materials';
@@ -33,6 +35,7 @@ const fetchProductMaterials = '/api/fetchProducts_Materials';
 // product_restaurant
 const createProductsRestaurants = '/api/createProducts_Restaurants';
 const deleteProductsRestaurant = '/api/deleteProducts_Restaurant';
+const getProductsRestaurant = '/api/getProducts_Restaurants';
 // type_material
 const createTypeMaterial = '/api/createType_Material';
 const deleteTypeMaterial = '/api/deleteType_Material';

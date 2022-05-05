@@ -192,27 +192,6 @@ class _MaterialCEDState extends State<MaterialCED> {
                                             ),
                                             actionsOverflowButtonSpacing: 20,
                                             actions: [
-                                              // ElevatedButton(
-                                              //   style: ButtonStyle(
-                                              //     backgroundColor:
-                                              //         MaterialStateProperty.all(
-                                              //             Color.fromARGB(255,
-                                              //                 168, 196, 13)),
-                                              //     shape: MaterialStateProperty.all(
-                                              //         const RoundedRectangleBorder(
-                                              //             borderRadius:
-                                              //                 BorderRadius.all(
-                                              //                     Radius
-                                              //                         .circular(
-                                              //                             20)))),
-                                              //   ),
-                                              //   child: const Text(
-                                              //       "Add Restaurant"),
-                                              //   onPressed: () {
-                                              //     materialBloc.add(MaterialAdd(
-                                              //         materialId: materialID));
-                                              //   },
-                                              // ),
                                               ElevatedButton(
                                                 style: ButtonStyle(
                                                   backgroundColor:

@@ -15,78 +15,86 @@ part 'datarestaurant_state.dart';
 class DatarestaurantBloc
     extends Bloc<DatarestaurantEvent, DatarestaurantState> {
   DatarestaurantBloc() : super(DatarestaurantInitial()) {
-    dynamic material_restaurant;
-    dynamic material_productAll;
-    List groupProductMaterials = [];
     dynamic products;
-    List data_material = [];
-    dynamic restaurant;
+    bool canCook = true;
     String restaurantID = '';
+    bool success = true;
     on<DatarestaurantEvent>((event, emit) async {
       if (event is DataCheck) {
         final prefs = await SharedPreferences.getInstance();
         restaurantID = prefs.getString(idRestaurant).toString();
-        // get data material
-        material_restaurant = await CallAPI()
-            .Get(getMaterialsRestaurant, {"Restaurants": restaurantID});
-        material_restaurant = json.decode(material_restaurant);
-        for (var i = 0; i < material_restaurant.length; i++) {
-          data_material.add({
-            "_id": material_restaurant[i]['_id'],
-            "MaterialID": material_restaurant[i]['Materials']['_id'],
-            "unit": material_restaurant[i]['Materials']['unit'],
-            "value": material_restaurant[i]['available_new']
-          });
-        }
-        // get all product
-        products = await CallAPI().Get(getProducts, "");
-        products = json.decode(products);
-        // get all material in product
-        material_productAll = await CallAPI().Get(fetchProductMaterials, "");
-        material_productAll = json.decode(material_productAll);
-        // get information product
-        for (var i = 0; i < products.length; i++) {
-          dynamic productMaterial;
-          List data = [];
-          productMaterial = await CallAPI()
-              .Get(getProductsMaterials, {"Products": products[i]['_id']});
-          productMaterial = json.decode(productMaterial);
-          for (var k = 0; k < productMaterial.length; k++) {
-            int count = 0;
-            // dynamic material_product;
-            double value_material_restaurant = 0.0;
-            double value_materialProduct = 0.0;
-            double total_value_material = 0.0;
-            for (var c = 0; c < data_material.length; c++) {
-              if (productMaterial[k]['Materials']['_id'] ==
-                  data_material[c]['MaterialID']) {
-                value_material_restaurant = data_material[c]['value'] / 1.0;
-              }
-            }
-            for (var d = 0; d < material_productAll.length; d++) {
-              if (productMaterial[k]['Materials']['_id'] ==
-                  material_productAll[d]['Materials']["_id"]) {
-                total_value_material += material_productAll[d]['value'] / 1.0;
-                count++;
-              }
-            }
-            value_materialProduct = productMaterial[k]['value'] / 1.0;
-            data.add(
-                (value_material_restaurant / (total_value_material / count)) /
-                    count);
-          }
-          var smallestData = data[0];
 
-          for (var z = 0; z < data.length; z++) {
-            // Checking for smallest value in the list
-            if (data[z] < smallestData) {
-              smallestData = data[z];
+        // get all product
+        products = await CallAPI()
+            .Get(getProductsRestaurant, {"Restaurants": restaurantID});
+        log(products);
+        products = json.decode(products);
+        emit(DataRes(data: products));
+      }
+      if (event is DataCheckValue) {
+        final prefs = await SharedPreferences.getInstance();
+        restaurantID = prefs.getString(idRestaurant).toString();
+        var productMaterial = await CallAPI()
+            .Get(getProductsMaterials, {"Products": event.productId});
+        productMaterial = json.decode(productMaterial);
+        for (var i = 0; i < productMaterial.length; i++) {
+          var material = await CallAPI().Get(getMaterialRestaurant, {
+            "Materials": productMaterial[i]['Materials']['_id'],
+            "Restaurants": restaurantID
+          });
+          material = json.decode(material);
+          productMaterial[i]['Materials']['valueRes'] =
+              material[0]['available_new'];
+          productMaterial[i]['Materials']['total'] =
+              productMaterial[i]['value'] * event.value;
+          material[0]['available_new'];
+          if (productMaterial[i]['Materials']['valueRes'] <
+              productMaterial[i]['Materials']['total']) {
+            canCook = false;
+          }
+        }
+        emit(DataResValue(
+            data: productMaterial, canCook: canCook, number: event.value));
+      }
+      if (event is DataUpdateValue) {
+        final prefs = await SharedPreferences.getInstance();
+        restaurantID = prefs.getString(idRestaurant).toString();
+        var mR = await CallAPI()
+            .Get(getMaterialsRestaurant, {'Restaurants': restaurantID});
+        if (mR != '') {
+          log(mR.toString());
+          log(event.data.toString());
+          mR = json.decode(mR);
+          for (var i = 0; i < event.data.length; i++) {
+            String id = '';
+            for (var k = 0; k < mR.length; k++) {
+              if (mR[k]['Materials']['_id'] ==
+                  event.data[i]['Materials']['_id']) {
+                id = mR[k]['_id'];
+                break;
+              }
+            }
+            var paramsUpdate = {
+              "id": id,
+              "available_old":
+                  event.data[i]['Materials']['valueRes'].toString(),
+              "available_new": (event.data[i]['Materials']['valueRes'] -
+                      event.data[i]['Materials']['total'])
+                  .toString()
+            };
+            var resUpdate =
+                await CallAPI().Put(updateMaterialsRestaurant, paramsUpdate);
+            log(resUpdate);
+            if (resUpdate == '') {
+              success = false;
             }
           }
-          //  add data to products[i]
-          products[i]['available'] = smallestData;
         }
-        emit(DataRes(data: products));
+        if (success) {
+          emit(DataUpdated());
+        } else {
+          emit(DataUpdateFail());
+        }
       }
     });
   }
