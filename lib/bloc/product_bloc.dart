@@ -108,13 +108,23 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         emit(ProductIsUpdating());
         log("is updating!");
         var res = await CallAPI().Put(updateProduct, event.params);
-        res = json.decode(res);
         if (res != '') {
           emit(ProductUpdated());
-          log("updated");
         } else {
           emit(ProductUpdateFail());
-          log("fail");
+        }
+      }
+      if (event is ProductDelete) {
+        log(event.params.toString());
+        emit(ProductIsDeleting());
+        log("is deleting!");
+        var res2 = await CallAPI().Delete(deleteProduct, event.params);
+        if (res2 != '') {
+          emit(ProductDeleted());
+          log("is deleted!");
+        } else {
+          emit(ProductDeleteFail());
+          log("is delete fail!");
         }
       }
     });

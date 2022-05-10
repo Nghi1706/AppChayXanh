@@ -21,23 +21,46 @@ class MenuEmployee extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    showDialogResult(BuildContext context, String data) {
+      AlertDialog alert = AlertDialog(
+        content: Text(data),
+        actions: [
+          OutlinedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text("cancel")),
+          OutlinedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (BuildContext context) => BlocProvider(
+                      create: (context) => LoginBloc(),
+                      child: const LoginScreen(),
+                    ),
+                  ),
+                );
+              },
+              child: const Text("ok"))
+        ],
+      );
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
+    }
+
     return Scaffold(
         appBar: AppBar(
           title: Text(restaurantName),
           centerTitle: true,
           actions: [
             IconButton(
-                onPressed: () => {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute<void>(
-                          builder: (BuildContext context) => BlocProvider(
-                            create: (context) => LoginBloc(),
-                            child: const LoginScreen(),
-                          ),
-                        ),
-                      )
-                    },
+                onPressed: () => {showDialogResult(context, "Logout ?")},
                 icon: Icon(Icons.logout))
           ],
         ),

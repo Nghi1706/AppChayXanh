@@ -27,48 +27,6 @@ class _CookProductState extends State<CookProduct> {
 
   @override
   Widget build(BuildContext context) {
-    showDialogResult(BuildContext context, String data) {
-      AlertDialog alert = AlertDialog(
-        content: Text(data),
-        actions: [
-          OutlinedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text("cancel")),
-          OutlinedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text("ok"))
-        ],
-      );
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        },
-      );
-    }
-
-    showLoaderDialog(BuildContext context, String data) {
-      AlertDialog alert = AlertDialog(
-        content: new Row(
-          children: [
-            CircularProgressIndicator(),
-            Container(margin: EdgeInsets.only(left: 7), child: Text(data)),
-          ],
-        ),
-      );
-      showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        },
-      );
-    }
-
     List data = [];
     bool canCook = true;
     double number = 0.0;
@@ -87,8 +45,10 @@ class _CookProductState extends State<CookProduct> {
               for (var i = 0; i < data.length; i++) {
                 material.add(DataRow(cells: [
                   DataCell(Text(data[i]['Materials']['name'])),
-                  DataCell(Text(data[i]['Materials']['total'].toString())),
-                  DataCell(Text(data[i]['Materials']['valueRes'].toString())),
+                  DataCell(
+                      Text(data[i]['Materials']['total'].toStringAsFixed(2))),
+                  DataCell(Text(
+                      data[i]['Materials']['valueRes'].toStringAsFixed(2))),
                   DataCell(Text(data[i]['Materials']['unit'])),
                 ]));
               }
@@ -141,16 +101,15 @@ class _CookProductState extends State<CookProduct> {
                                                 bloc: datarestaurantBloc,
                                                 listener: (context, state) {
                                                   if (state is DataUpdating) {
-                                                    Navigator.pop(context);
                                                     showLoaderDialog(
                                                         context, "updating !");
-                                                  } else if (state
-                                                      is DataUpdated) {
+                                                  }
+                                                  if (state is DataUpdated) {
                                                     Navigator.pop(context);
                                                     showDialogResult(
                                                         context, "updated");
-                                                  } else if (state
-                                                      is DataUpdateFail) {
+                                                  }
+                                                  if (state is DataUpdateFail) {
                                                     Navigator.pop(context);
                                                     showDialogResult(
                                                         context, "fail");
@@ -180,6 +139,43 @@ class _CookProductState extends State<CookProduct> {
               ),
             );
           }),
+    );
+  }
+
+  showLoaderDialog(BuildContext context, String data) {
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(margin: EdgeInsets.only(left: 7), child: Text(data)),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  showDialogResult(BuildContext context, String data) {
+    AlertDialog alert = AlertDialog(
+      content: Text(data),
+      actions: [
+        OutlinedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("ok"))
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }

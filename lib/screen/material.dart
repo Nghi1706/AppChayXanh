@@ -39,6 +39,7 @@ class _MaterialCEDState extends State<MaterialCED> {
   Widget build(BuildContext context) {
     bool isMaterialAll = widget.isMaterialAll;
     bool isMaterialrestaurant = widget.isMaterialRestaurant;
+    int role = 0;
     List type = [];
     List unit = [];
     List material = [];
@@ -121,11 +122,11 @@ class _MaterialCEDState extends State<MaterialCED> {
                                                   const SizedBox(
                                                     height: 5,
                                                   ),
-                                                  const Text("id_material"),
-                                                  Text(materialID),
-                                                  const SizedBox(
-                                                    height: 10,
-                                                  ),
+                                                  // const Text("id_material"),
+                                                  // Text(materialID),
+                                                  // const SizedBox(
+                                                  //   height: 10,
+                                                  // ),
                                                   TextField(
                                                     decoration: InputDecoration(
                                                         border:
@@ -435,6 +436,7 @@ class _MaterialCEDState extends State<MaterialCED> {
                   builder: (context, state) {
                     if (state is RestaurantMaterialScreen) {
                       material = state.material;
+                      role = state.role;
                     }
                     return ListView.builder(
                       itemCount: material.length,
@@ -486,11 +488,11 @@ class _MaterialCEDState extends State<MaterialCED> {
                                               const SizedBox(
                                                 height: 5,
                                               ),
-                                              const Text("Pin :"),
-                                              Text(restaurantMaterialID),
-                                              const SizedBox(
-                                                height: 10,
-                                              ),
+                                              // const Text("Pin :"),
+                                              // Text(restaurantMaterialID),
+                                              // const SizedBox(
+                                              //   height: 10,
+                                              // ),
                                               const SizedBox(
                                                 height: 5,
                                               ),
@@ -523,8 +525,7 @@ class _MaterialCEDState extends State<MaterialCED> {
                                               ),
                                               TextField(
                                                 decoration: new InputDecoration(
-                                                    labelText:
-                                                        "update available"),
+                                                    labelText: "Available"),
                                                 keyboardType: TextInputType
                                                     .numberWithOptions(
                                                         decimal: true),
@@ -573,6 +574,41 @@ class _MaterialCEDState extends State<MaterialCED> {
                                               });
                                             },
                                           ),
+                                          role == 2
+                                              ? ElevatedButton(
+                                                  style: ButtonStyle(
+                                                    backgroundColor:
+                                                        MaterialStateProperty
+                                                            .all(Color.fromARGB(
+                                                                255,
+                                                                28,
+                                                                101,
+                                                                161)),
+                                                    shape: MaterialStateProperty.all(
+                                                        const RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius.all(
+                                                                    Radius.circular(
+                                                                        20)))),
+                                                  ),
+                                                  child: const Text("Transfer"),
+                                                  onPressed: () {
+                                                    // materialBloc.add(
+                                                    //     MaterialDelete(
+                                                    //         materialId:
+                                                    //             materialID));
+                                                    // setState(() {
+                                                    //   materialBloc.add(
+                                                    //       MaterialCheckEvent(
+                                                    //     isMaterialAll: widget
+                                                    //         .isMaterialAll,
+                                                    //     isMaterialRestaurant: widget
+                                                    //         .isMaterialRestaurant,
+                                                    //   ));
+                                                    // });
+                                                  },
+                                                )
+                                              : Text(""),
                                           ElevatedButton(
                                             style: ButtonStyle(
                                               backgroundColor:

@@ -32,7 +32,6 @@ class _ProductScreenState extends State<ProductScreen> {
     final int role = widget.role;
     checkColor(String number) {
       int numberColor = int.parse(number);
-      log(number);
       if (numberColor == 0) {
         return Colors.yellow[200];
       } else if (numberColor == -1) {

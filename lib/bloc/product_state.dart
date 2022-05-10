@@ -37,3 +37,9 @@ class ProductIsCreating extends ProductState {}
 class ProductCreated extends ProductState {}
 
 class ProductCreateFail extends ProductState {}
+
+class ProductIsDeleting extends ProductState {}
+
+class ProductDeleted extends ProductState {}
+
+class ProductDeleteFail extends ProductState {}

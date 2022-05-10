@@ -20,6 +20,9 @@ class MaterialBloc extends Bloc<MaterialEvent, MaterialsState> {
   MaterialBloc() : super(MaterialInitial()) {
     on<MaterialEvent>((event, emit) async {
       if (event is MaterialCheckEvent) {
+        final prefs = await SharedPreferences.getInstance();
+        String roleSaved = prefs.getString(role).toString();
+        int role_use = int.parse(roleSaved);
         if (event.isMaterialAll) {
           type = await CallAPI().Get(getTypeMaterial, '');
           type = jsonDecode(type);
@@ -45,7 +48,7 @@ class MaterialBloc extends Bloc<MaterialEvent, MaterialsState> {
               await CallAPI().Get(getMaterialsRestaurant, paramsMaterials);
           material = jsonDecode(material);
           emit(RestaurantMaterialScreen(
-              type: type, unit: unit, material: material));
+              type: type, unit: unit, material: material, role: role_use));
         }
       }
       if (event is MaterialCreate) {

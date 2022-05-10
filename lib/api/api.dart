@@ -4,6 +4,7 @@ const createUser = '/api/createUser';
 const updateUser = '/api/updateUser';
 const login = '/api/login';
 const deleteUser = '/api/deleteUser';
+const getUsers = '/api/getUsers';
 //restaurant
 const findRestaurant = '/api/findRestaurant';
 const getListRestaurant = '/api/getListRestaurant';

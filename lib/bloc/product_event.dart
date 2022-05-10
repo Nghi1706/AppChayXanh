@@ -12,6 +12,11 @@ class ProductAdd extends ProductEvent {
   ProductAdd({required this.params});
 }
 
+class ProductDelete extends ProductEvent {
+  final params;
+  ProductDelete({required this.params});
+}
+
 class ProductUpdate extends ProductEvent {
   final params;
   ProductUpdate({required this.params});

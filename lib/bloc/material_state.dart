@@ -42,8 +42,12 @@ class RestaurantMaterialScreen extends MaterialsState {
   List type;
   List unit;
   List material;
+  int role;
   RestaurantMaterialScreen(
-      {required this.type, required this.unit, required this.material});
+      {required this.type,
+      required this.unit,
+      required this.material,
+      required this.role});
 }
 
 class RestaurantMaterialDeleteState extends MaterialsState {

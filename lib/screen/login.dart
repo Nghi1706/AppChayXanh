@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:chayxanhapp/bloc/employee_bloc.dart';
 import 'package:chayxanhapp/bloc/menu_bloc.dart';
 import 'package:chayxanhapp/screen/menu.dart';
 import 'package:flutter/material.dart';
@@ -72,11 +73,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute<void>(
-                            builder: (BuildContext context) => BlocProvider(
-                              create: (context) => MenuBloc(),
-                              child: Menu(),
-                            ),
-                          ),
+                              builder: (BuildContext context) =>
+                                  MultiBlocProvider(
+                                    providers: [
+                                      BlocProvider(
+                                        create: (context) => MenuBloc(),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) => EmployeeBloc(),
+                                      ),
+                                    ],
+                                    child: Menu(),
+                                  )),
                         );
                       }
 

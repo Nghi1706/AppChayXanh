@@ -22,6 +22,7 @@ class _ProductInfoState extends State<ProductInfo> {
   String comment = '';
   int status = 0;
   String commentBy = '';
+  String _id = '';
   @override
   void initState() {
     productBloc = BlocProvider.of(context);
@@ -48,6 +49,7 @@ class _ProductInfoState extends State<ProductInfo> {
                 cost = data['Products']['cost'];
                 status = int.parse(data['Products']['status']);
                 comment = data['Products']['comment'];
+                _id = data['Products']['Products'];
                 if (status == 1) {
                   commentBy = 'Manager';
                 } else if (status == 2) {
@@ -79,16 +81,25 @@ class _ProductInfoState extends State<ProductInfo> {
                                     "Product name: ",
                                     style: TextStyle(fontSize: 20),
                                   ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
                                   Text(
-                                    productName,
+                                    "  " + productName,
                                     style: const TextStyle(fontSize: 18),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
                                   ),
                                   const Text(
                                     "Product cost: ",
                                     style: TextStyle(fontSize: 20),
                                   ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
                                   Text(
-                                    cost,
+                                    "  " + cost,
                                     style: const TextStyle(fontSize: 18),
                                   ),
                                 ],
@@ -126,7 +137,7 @@ class _ProductInfoState extends State<ProductInfo> {
                                     children: [
                                       Container(
                                         child: TextField(
-                                            decoration: InputDecoration(
+                                            decoration: const InputDecoration(
                                               border: OutlineInputBorder(),
                                               labelText: 'comment',
                                             ),
@@ -135,42 +146,166 @@ class _ProductInfoState extends State<ProductInfo> {
                                               comment = value;
                                             }),
                                       ),
-                                      Row(
-                                        children: [
-                                          OutlinedButton(
-                                              onPressed: () {
-                                                var params = {
-                                                  "_id": widget.idProduct,
-                                                  "status": role.toString(),
-                                                  "comment": comment
-                                                };
-                                                productBloc.add(ProductUpdate(
-                                                    params: params));
-                                              },
-                                              child: Text("accept")),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          OutlinedButton(
-                                              onPressed: () {
-                                                var params = {
-                                                  "_id": widget.idProduct,
-                                                  "status": "-1",
-                                                  "comment": comment
-                                                };
-                                                productBloc.add(ProductUpdate(
-                                                    params: params));
-                                              },
-                                              child: Text("denine"))
-                                        ],
-                                      )
+                                      BlocListener<ProductBloc, ProductState>(
+                                          bloc: productBloc,
+                                          listener: (context, state) {
+                                            if (state is ProductIsUpdating) {
+                                              showLoaderDialog(
+                                                  context, "Loading !");
+                                            }
+                                            if (state is ProductUpdated) {
+                                              Navigator.pop(context);
+                                              showDialogResult(
+                                                  context, "Success !");
+                                            }
+                                            if (state is ProductUpdateFail) {
+                                              Navigator.pop(context);
+                                              showDialogResult(
+                                                  context, "Fail !");
+                                            }
+                                          },
+                                          child: Row(
+                                            children: [
+                                              OutlinedButton(
+                                                  onPressed: () {
+                                                    var params = {
+                                                      "_id": widget.idProduct,
+                                                      "status": role.toString(),
+                                                      "comment": comment
+                                                    };
+                                                    productBloc.add(
+                                                        ProductUpdate(
+                                                            params: params));
+                                                  },
+                                                  child: const Text("accept")),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              OutlinedButton(
+                                                  onPressed: () {
+                                                    var params = {
+                                                      "_id": widget.idProduct,
+                                                      "status": "-1",
+                                                      "comment": comment
+                                                    };
+                                                    productBloc.add(
+                                                        ProductUpdate(
+                                                            params: params));
+                                                  },
+                                                  child: const Text("deny")),
+                                            ],
+                                          ))
                                     ],
                                   )
                                 : Row(),
+                            role == 2
+                                ? OutlinedButton(
+                                    onPressed: () => {
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  content: Text(
+                                                      "Delete this Product"),
+                                                  actions: [
+                                                    OutlinedButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child:
+                                                            const Text("No")),
+                                                    BlocListener<ProductBloc,
+                                                        ProductState>(
+                                                      bloc: productBloc,
+                                                      listener:
+                                                          (context, state) {
+                                                        log(state.toString());
+                                                        if (state
+                                                            is ProductIsDeleting) {
+                                                          log("deleting !");
+
+                                                          showLoaderDialog(
+                                                              context,
+                                                              "Deleting !");
+                                                        }
+                                                        if (state
+                                                            is ProductDeleted) {
+                                                          log("deleted !");
+                                                          Navigator.pop(
+                                                              context);
+                                                          showDialogResult(
+                                                              context,
+                                                              "Deleted");
+                                                        }
+                                                        if (state
+                                                            is ProductDeleteFail) {
+                                                          log("delete fail !");
+                                                          Navigator.pop(
+                                                              context);
+                                                          showDialogResult(
+                                                              context, "fail");
+                                                        }
+                                                      },
+                                                      child: OutlinedButton(
+                                                          onPressed: () {
+                                                            productBloc.add(
+                                                                ProductDelete(
+                                                                    params: {
+                                                                  "id": _id
+                                                                }));
+                                                          },
+                                                          child: const Text(
+                                                              "Yes")),
+                                                    )
+                                                  ],
+                                                );
+                                              })
+                                        },
+                                    child: const Text("Delete"))
+                                : Container()
                           ],
                         ),
                       ))
                   : Container();
             }));
+  }
+
+  showLoaderDialog(BuildContext context, String data) {
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(margin: EdgeInsets.only(left: 7), child: Text(data)),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  showDialogResult(BuildContext context, String data) {
+    AlertDialog alert = AlertDialog(
+      content: Text(data),
+      actions: [
+        OutlinedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+            child: const Text("ok"))
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

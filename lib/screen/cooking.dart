@@ -66,89 +66,122 @@ class _CookingScreenState extends State<CookingScreen> {
                     ),
                   ),
                   onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20))),
-                          title: Text('Nhập số lượng'),
-                          content: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                TextField(
-                                  decoration: new InputDecoration(
-                                      labelText: "update available"),
-                                  keyboardType: TextInputType.numberWithOptions(
-                                      decimal: true),
-                                  inputFormatters: <TextInputFormatter>[
-                                    FilteringTextInputFormatter
-                                        .singleLineFormatter
-                                  ],
-                                  onChanged: (value) => {
-                                    number = double.parse(value),
-                                  }, // Only numbers can be entered
-                                )
-                              ],
-                            ),
-                          ),
-                          actionsOverflowButtonSpacing: 20,
-                          actions: [
-                            ElevatedButton(
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    Color.fromARGB(255, 248, 54, 40)),
-                                shape: MaterialStateProperty.all(
-                                    const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20)))),
-                              ),
-                              child: const Text("OK"),
-                              onPressed: () {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute<void>(
-                                    builder: (BuildContext context) =>
-                                        BlocProvider(
-                                      create: (context) => DatarestaurantBloc(),
-                                      child: CookProduct(
-                                        productID: product[index]['Products']
-                                            ['_id'],
-                                        value: number,
+                    product[index]['Products']['status'] == 2
+                        ? showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20))),
+                                title: Text('Nhập số lượng'),
+                                content: SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(
+                                        height: 5,
                                       ),
-                                    ),
+                                      TextField(
+                                        decoration: new InputDecoration(
+                                            labelText: "update available"),
+                                        keyboardType:
+                                            TextInputType.numberWithOptions(
+                                                decimal: true),
+                                        inputFormatters: <TextInputFormatter>[
+                                          FilteringTextInputFormatter
+                                              .singleLineFormatter
+                                        ],
+                                        onChanged: (value) => {
+                                          number = double.parse(value),
+                                        }, // Only numbers can be entered
+                                      )
+                                    ],
                                   ),
-                                );
-                              },
-                            ),
-                            ElevatedButton(
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all(Colors.green),
-                                shape: MaterialStateProperty.all(
-                                    const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20)))),
-                              ),
-                              child: const Text("Cancel"),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
+                                ),
+                                actionsOverflowButtonSpacing: 20,
+                                actions: [
+                                  ElevatedButton(
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Color.fromARGB(255, 248, 54, 40)),
+                                      shape: MaterialStateProperty.all(
+                                          const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20)))),
+                                    ),
+                                    child: const Text("OK"),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute<void>(
+                                          builder: (BuildContext context) =>
+                                              BlocProvider(
+                                            create: (context) =>
+                                                DatarestaurantBloc(),
+                                            child: CookProduct(
+                                              productID: product[index]
+                                                  ['Products']['_id'],
+                                              value: number,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  ElevatedButton(
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Colors.green),
+                                      shape: MaterialStateProperty.all(
+                                          const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20)))),
+                                    ),
+                                    child: const Text("Cancel"),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          )
+                        : showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20))),
+                                content: const Text(
+                                    "The product has not been accepted by Host"),
+                                actionsOverflowButtonSpacing: 20,
+                                actions: [
+                                  ElevatedButton(
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Colors.green),
+                                      shape: MaterialStateProperty.all(
+                                          const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20)))),
+                                    ),
+                                    child: const Text("Cancel"),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                   },
-                  // onTap: () {
-                  //
-                  // },
                 );
               });
         },
