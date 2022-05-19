@@ -32,9 +32,9 @@ class _CookingScreenState extends State<CookingScreen> {
     } else if (numberColor == -1) {
       return Colors.red[200];
     } else if (numberColor == 1) {
-      return Colors.green[200];
-    } else if (numberColor == 2) {
       return Colors.blue[200];
+    } else if (numberColor == 2) {
+      return Colors.green[200];
     }
   }
 

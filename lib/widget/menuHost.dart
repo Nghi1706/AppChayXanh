@@ -270,7 +270,7 @@ class _MenuHostState extends State<MenuHost> {
                           shape: const RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20))),
-                          title: Text('Chọn nhà hàng'),
+                          title: Text('Choose restaurant'),
                           content: SingleChildScrollView(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -278,7 +278,7 @@ class _MenuHostState extends State<MenuHost> {
                                 const SizedBox(
                                   height: 5,
                                 ),
-                                const Text("Danh sách nhà hàng"),
+                                const Text("List restaurant"),
                                 const SizedBox(
                                   height: 10,
                                 ),
@@ -394,7 +394,7 @@ class _MenuHostState extends State<MenuHost> {
                           shape: const RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20))),
-                          title: Text('Chọn nhà hàng'),
+                          title: Text('Choose restaurant'),
                           content: SingleChildScrollView(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -402,7 +402,7 @@ class _MenuHostState extends State<MenuHost> {
                                 const SizedBox(
                                   height: 5,
                                 ),
-                                const Text("Danh sách nhà hàng"),
+                                const Text("List restaurant"),
                                 const SizedBox(
                                   height: 10,
                                 ),

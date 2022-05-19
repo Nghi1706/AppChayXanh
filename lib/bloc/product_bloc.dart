@@ -119,7 +119,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         emit(ProductIsDeleting());
         log("is deleting!");
         var res2 = await CallAPI().Delete(deleteProduct, event.params);
-        if (res2 != '') {
+        var res3 =
+            await CallAPI().Delete(deleteProductsRestaurant, event.params);
+        if (res2 != '' && res3 != '') {
           emit(ProductDeleted());
           log("is deleted!");
         } else {

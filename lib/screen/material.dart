@@ -140,7 +140,7 @@ class _MaterialCEDState extends State<MaterialCED> {
                                                   const SizedBox(
                                                     height: 10,
                                                   ),
-                                                  Text("Chọn loại nguyên liệu"),
+                                                  Text("Type of material"),
                                                   DropdownButtonFormField(
                                                     items:
                                                         type.map((items_type) {
@@ -166,8 +166,7 @@ class _MaterialCEDState extends State<MaterialCED> {
                                                   const SizedBox(
                                                     height: 10,
                                                   ),
-                                                  const Text(
-                                                      "Chọn đơn vị tính"),
+                                                  const Text("Unit"),
                                                   DropdownButtonFormField(
                                                     items: unit.map((unit) {
                                                       return DropdownMenuItem<
@@ -334,7 +333,7 @@ class _MaterialCEDState extends State<MaterialCED> {
                                                   const SizedBox(
                                                     height: 10,
                                                   ),
-                                                  Text("Chọn loại nguyên liệu"),
+                                                  Text("Type of material"),
                                                   DropdownButtonFormField(
                                                     items:
                                                         type.map((items_type) {
@@ -360,8 +359,7 @@ class _MaterialCEDState extends State<MaterialCED> {
                                                   const SizedBox(
                                                     height: 10,
                                                   ),
-                                                  const Text(
-                                                      "Chọn đơn vị tính"),
+                                                  const Text("Unit"),
                                                   DropdownButtonFormField(
                                                     items: unit.map((unit) {
                                                       return DropdownMenuItem<
@@ -513,7 +511,7 @@ class _MaterialCEDState extends State<MaterialCED> {
                                               const SizedBox(
                                                 height: 5,
                                               ),
-                                              Text("Tồn kho : " +
+                                              Text("available : " +
                                                   material[index]
                                                           ['available_new']
                                                       .toString() +

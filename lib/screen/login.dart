@@ -47,6 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextField(
                   decoration: const InputDecoration(
                       border: OutlineInputBorder(), labelText: 'Phone number'),
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
                   onChanged: (value) => {
                     _phoneNumber = value,
                   },

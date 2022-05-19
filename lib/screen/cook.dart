@@ -54,19 +54,27 @@ class _CookProductState extends State<CookProduct> {
               }
             }
             return Container(
+              padding: EdgeInsets.all(10),
               child: Column(
                 children: [
                   Row(
                     children: [
                       data.length != 0
-                          ? Text(data[0]['Products']['name'])
+                          ? Text(
+                              "Name : " + data[0]['Products']['name'],
+                              style: TextStyle(fontSize: 20),
+                            )
                           : Text('waiting....')
                     ],
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   Row(
                     children: [
                       number != 0
-                          ? Text("Number product:" + number.toString())
+                          ? Text("Number product : " + number.toString(),
+                              style: TextStyle(fontSize: 20))
                           : Text("waiting....")
                     ],
                   ),
@@ -105,12 +113,10 @@ class _CookProductState extends State<CookProduct> {
                                                         context, "updating !");
                                                   }
                                                   if (state is DataUpdated) {
-                                                    Navigator.pop(context);
                                                     showDialogResult(
                                                         context, "updated");
                                                   }
                                                   if (state is DataUpdateFail) {
-                                                    Navigator.pop(context);
                                                     showDialogResult(
                                                         context, "fail");
                                                   }
@@ -166,6 +172,7 @@ class _CookProductState extends State<CookProduct> {
       actions: [
         OutlinedButton(
             onPressed: () {
+              Navigator.pop(context);
               Navigator.pop(context);
             },
             child: const Text("ok"))

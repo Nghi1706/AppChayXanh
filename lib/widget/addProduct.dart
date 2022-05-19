@@ -17,7 +17,7 @@ class AddProducts extends StatefulWidget {
 class _AddProductsState extends State<AddProducts> {
   ProductBloc productBloc = ProductBloc();
   List<Widget> _selection = [];
-  final List _value = ["1cái", "2cái", "10g", "20g", "50g", "100g"];
+  final List _value = ["1item", "2item", "10g", "20g", "50g", "100g"];
   List productMaterial = [];
   String name = '';
   String cost = '0';
@@ -51,9 +51,9 @@ class _AddProductsState extends State<AddProducts> {
 
   _dataSelection(value) {
     switch (value) {
-      case "1cái":
+      case "1item":
         return 1;
-      case "2cái":
+      case "2item":
         return 2;
       case "10g":
         return 0.01;
@@ -73,23 +73,6 @@ class _AddProductsState extends State<AddProducts> {
             children: productMaterial
                 .map((item) => Row(
                       children: [
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.2,
-                            child: DropdownButtonFormField(
-                              items: _value.map((vl) {
-                                return DropdownMenuItem<String>(
-                                  value: vl.toString(),
-                                  child: Text(
-                                    vl.toString(),
-                                    style: const TextStyle(color: Colors.green),
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                item["value"] = _dataSelection(value);
-                              },
-                              // value: typeName,
-                            )),
                         Expanded(
                             child: SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.5,
@@ -111,7 +94,24 @@ class _AddProductsState extends State<AddProducts> {
                                   onChanged: (value) {
                                     item["name"] = value;
                                   },
-                                )))
+                                ))),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.2,
+                            child: DropdownButtonFormField(
+                              items: _value.map((vl) {
+                                return DropdownMenuItem<String>(
+                                  value: vl.toString(),
+                                  child: Text(
+                                    vl.toString(),
+                                    style: const TextStyle(color: Colors.green),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                item["value"] = _dataSelection(value);
+                              },
+                              // value: typeName,
+                            )),
                       ],
                     ))
                 .toList(),
@@ -180,6 +180,7 @@ class _AddProductsState extends State<AddProducts> {
               TextField(
                 decoration: const InputDecoration(
                     border: OutlineInputBorder(), labelText: "Productcost"),
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
                 onChanged: (value) => {
                   cost = value,
                 },
@@ -207,13 +208,13 @@ class _AddProductsState extends State<AddProducts> {
               Row(
                 children: [
                   SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    child: const Text("name"),
+                  ),
+                  SizedBox(
                     width: MediaQuery.of(context).size.width * 0.2,
                     child: const Text("value"),
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.5,
-                    child: const Text("name"),
-                  )
                 ],
               ),
               Expanded(

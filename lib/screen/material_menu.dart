@@ -57,7 +57,7 @@ class _MaterialMenuState extends State<MaterialMenu> {
               },
               child: const ButtonCustom(
                 icon: Icons.other_houses_outlined,
-                text: "Quản lý nguyên liệu chung",
+                text: "Material Infomation",
               )),
           widget.listRestaurant.length == 0
               ? InkWell(
@@ -76,7 +76,7 @@ class _MaterialMenuState extends State<MaterialMenu> {
                   },
                   child: const ButtonCustom(
                     icon: Icons.other_houses,
-                    text: "Nguyên liệu nhà hàng",
+                    text: "Restaurant's material",
                   ))
               : InkWell(
                   onTap: () {
@@ -87,7 +87,7 @@ class _MaterialMenuState extends State<MaterialMenu> {
                           shape: const RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20))),
-                          title: Text('Chọn nhà hàng'),
+                          title: Text('Choose restaurant'),
                           content: SingleChildScrollView(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,7 +95,7 @@ class _MaterialMenuState extends State<MaterialMenu> {
                                 const SizedBox(
                                   height: 5,
                                 ),
-                                const Text("Danh sách nhà hàng"),
+                                const Text("List restaurant"),
                                 const SizedBox(
                                   height: 10,
                                 ),
@@ -180,7 +180,7 @@ class _MaterialMenuState extends State<MaterialMenu> {
                   },
                   child: const ButtonCustom(
                     icon: Icons.other_houses,
-                    text: "Nguyên liệu nhà hàng",
+                    text: "Restaurant's material",
                   ))
         ],
       ),
