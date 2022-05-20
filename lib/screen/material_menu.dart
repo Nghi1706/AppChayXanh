@@ -154,8 +154,13 @@ class _MaterialMenuState extends State<MaterialMenu> {
                                 ),
                                 child: const Text("OK"),
                                 onPressed: () {
-                                  menuBloc.add(MenuMaterialHost(
-                                      RestaurantID: restaurantID));
+                                  if (restaurantID == '') {
+                                    showDialogResult(
+                                        context, "choose restaurant !");
+                                  } else {
+                                    menuBloc.add(MenuMaterialHost(
+                                        RestaurantID: restaurantID));
+                                  }
                                 },
                               ),
                             ),
@@ -184,6 +189,25 @@ class _MaterialMenuState extends State<MaterialMenu> {
                   ))
         ],
       ),
+    );
+  }
+
+  showDialogResult(BuildContext context, String data) {
+    AlertDialog alert = AlertDialog(
+      content: Text(data),
+      actions: [
+        OutlinedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("ok"))
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }

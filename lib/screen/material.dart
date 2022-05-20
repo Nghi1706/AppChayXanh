@@ -24,6 +24,25 @@ class MaterialCED extends StatefulWidget {
 }
 
 class _MaterialCEDState extends State<MaterialCED> {
+  showDialogResult(BuildContext context, String data) {
+    AlertDialog alert = AlertDialog(
+      content: Text(data),
+      actions: [
+        OutlinedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("ok"))
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   MaterialBloc materialBloc = MaterialBloc();
   @override
   void initState() {
@@ -238,21 +257,30 @@ class _MaterialCEDState extends State<MaterialCED> {
                                                 ),
                                                 child: const Text("Change"),
                                                 onPressed: () {
-                                                  materialBloc.add(MaterialEdit(
-                                                      materialId: materialID,
-                                                      materialName:
-                                                          materialEditName,
-                                                      materialType: typeName,
-                                                      materialUnit: unitName));
-                                                  setState(() {
-                                                    materialBloc
-                                                        .add(MaterialCheckEvent(
-                                                      isMaterialAll:
-                                                          widget.isMaterialAll,
-                                                      isMaterialRestaurant: widget
-                                                          .isMaterialRestaurant,
-                                                    ));
-                                                  });
+                                                  if (materialEditName == '') {
+                                                    showDialogResult(context,
+                                                        "check material name");
+                                                  } else {
+                                                    materialBloc.add(
+                                                        MaterialEdit(
+                                                            materialId:
+                                                                materialID,
+                                                            materialName:
+                                                                materialEditName,
+                                                            materialType:
+                                                                typeName,
+                                                            materialUnit:
+                                                                unitName));
+                                                    setState(() {
+                                                      materialBloc.add(
+                                                          MaterialCheckEvent(
+                                                        isMaterialAll: widget
+                                                            .isMaterialAll,
+                                                        isMaterialRestaurant: widget
+                                                            .isMaterialRestaurant,
+                                                      ));
+                                                    });
+                                                  }
                                                 },
                                               ),
                                             ],
@@ -397,23 +425,28 @@ class _MaterialCEDState extends State<MaterialCED> {
                                                 ),
                                                 child: const Text("Create"),
                                                 onPressed: () {
-                                                  materialBloc.add(
-                                                      MaterialCreate(
-                                                          materialName:
-                                                              materialName,
-                                                          materialType:
-                                                              typeName,
-                                                          materialUnit:
-                                                              unitName));
-                                                  setState(() {
-                                                    materialBloc
-                                                        .add(MaterialCheckEvent(
-                                                      isMaterialAll:
-                                                          widget.isMaterialAll,
-                                                      isMaterialRestaurant: widget
-                                                          .isMaterialRestaurant,
-                                                    ));
-                                                  });
+                                                  if (materialName == '') {
+                                                    showDialogResult(context,
+                                                        "check material name");
+                                                  } else {
+                                                    materialBloc.add(
+                                                        MaterialCreate(
+                                                            materialName:
+                                                                materialName,
+                                                            materialType:
+                                                                typeName,
+                                                            materialUnit:
+                                                                unitName));
+                                                    setState(() {
+                                                      materialBloc.add(
+                                                          MaterialCheckEvent(
+                                                        isMaterialAll: widget
+                                                            .isMaterialAll,
+                                                        isMaterialRestaurant: widget
+                                                            .isMaterialRestaurant,
+                                                      ));
+                                                    });
+                                                  }
                                                 },
                                               ),
                                             ],
@@ -533,8 +566,16 @@ class _MaterialCEDState extends State<MaterialCED> {
                                                       .singleLineFormatter
                                                 ],
                                                 onChanged: (value) => {
-                                                  restaurantMaterialEditAvailable =
-                                                      double.parse(value),
+                                                  if (value.length == 0)
+                                                    {
+                                                      restaurantMaterialEditAvailable =
+                                                          0.0
+                                                    }
+                                                  else
+                                                    {
+                                                      restaurantMaterialEditAvailable =
+                                                          double.parse(value),
+                                                    }
                                                 }, // Only numbers can be entered
                                               )
                                             ],
@@ -621,22 +662,28 @@ class _MaterialCEDState extends State<MaterialCED> {
                                             ),
                                             child: const Text("Update"),
                                             onPressed: () {
-                                              materialBloc.add(RestaurantMaterialUpdate(
-                                                  restaurantMaterialId:
-                                                      restaurantMaterialID,
-                                                  restaurantMaterialOldAvailable:
-                                                      restaurantMaterialNewAvailable,
-                                                  restaurantMaterialNewAvailable:
-                                                      restaurantMaterialEditAvailable));
-                                              setState(() {
-                                                materialBloc
-                                                    .add(MaterialCheckEvent(
-                                                  isMaterialAll:
-                                                      widget.isMaterialAll,
-                                                  isMaterialRestaurant: widget
-                                                      .isMaterialRestaurant,
-                                                ));
-                                              });
+                                              if (restaurantMaterialEditAvailable ==
+                                                  null) {
+                                                showDialogResult(
+                                                    context, "check value");
+                                              } else {
+                                                materialBloc.add(RestaurantMaterialUpdate(
+                                                    restaurantMaterialId:
+                                                        restaurantMaterialID,
+                                                    restaurantMaterialOldAvailable:
+                                                        restaurantMaterialNewAvailable,
+                                                    restaurantMaterialNewAvailable:
+                                                        restaurantMaterialEditAvailable));
+                                                setState(() {
+                                                  materialBloc
+                                                      .add(MaterialCheckEvent(
+                                                    isMaterialAll:
+                                                        widget.isMaterialAll,
+                                                    isMaterialRestaurant: widget
+                                                        .isMaterialRestaurant,
+                                                  ));
+                                                });
+                                              }
                                             },
                                           ),
                                         ],

@@ -49,6 +49,26 @@ class _AddProductsState extends State<AddProducts> {
     }
   }
 
+  checkProductMaterial() async {
+    if (productMaterial.length == 0) {
+      return false;
+    } else
+      return true;
+    // try {
+    //   for (var l = 0; l < productMaterial.length; i++) {
+    //     productMaterial[l]['value'];
+    //     for (var k = l + 1; k < productMaterial.length; k++) {
+    //       if (productMaterial[l]['name'] == productMaterial[k]['name']) {
+    //         return false;
+    //       }
+    //     }
+    //   }
+    //   return true;
+    // } catch (error) {
+    //   return false;
+    // }
+  }
+
   _dataSelection(value) {
     switch (value) {
       case "1item":
@@ -242,15 +262,21 @@ class _AddProductsState extends State<AddProducts> {
                       OutlinedButton(
                         child: Text('create'),
                         onPressed: () {
-                          var params = {
-                            "product": {
-                              "name": name,
-                              "cost": cost,
-                              "status": widget.role.toString()
-                            },
-                            "materials": productMaterial
-                          };
-                          productBloc.add(ProductAdd(params: params));
+                          if (name == '' ||
+                              cost == '' ||
+                              !checkProductMaterial()) {
+                            showDialogResult(context, "check name and cost");
+                          } else {
+                            var params = {
+                              "product": {
+                                "name": name,
+                                "cost": cost,
+                                "status": widget.role.toString()
+                              },
+                              "materials": productMaterial
+                            };
+                            productBloc.add(ProductAdd(params: params));
+                          }
                         },
                       ),
                     ],

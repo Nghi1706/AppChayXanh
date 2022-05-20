@@ -48,6 +48,16 @@ class _EmployeeCEDState extends State<EmployeeCED> {
       appBar: AppBar(
         title: const Text("Employee"),
         centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  log("ok");
+                  employeeBloc.add(FetchEmployee());
+                });
+              },
+              icon: Icon(Icons.refresh))
+        ],
       ),
       body: Container(
         padding: EdgeInsets.all(10),
@@ -154,6 +164,9 @@ class _EmployeeCEDState extends State<EmployeeCED> {
                                                       color: Colors.green),
                                                   border: OutlineInputBorder(),
                                                   label: Text("Phone")),
+                                              keyboardType: TextInputType
+                                                  .numberWithOptions(
+                                                      decimal: true),
                                               onChanged: (value) => {
                                                 phone = value,
                                               },

@@ -46,7 +46,7 @@ class _MenuHostState extends State<MenuHost> {
   @override
   Widget build(BuildContext context) {
     String restaurantID = '';
-    showDialogResult(BuildContext context, String data) {
+    showDialogResult(BuildContext context, String data, bool isLogout) {
       AlertDialog alert = AlertDialog(
         content: Text(data),
         actions: [
@@ -55,20 +55,22 @@ class _MenuHostState extends State<MenuHost> {
                 Navigator.pop(context);
               },
               child: const Text("cancel")),
-          OutlinedButton(
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (BuildContext context) => BlocProvider(
-                      create: (context) => LoginBloc(),
-                      child: const LoginScreen(),
-                    ),
-                  ),
-                );
-              },
-              child: const Text("ok"))
+          isLogout
+              ? OutlinedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (BuildContext context) => BlocProvider(
+                          create: (context) => LoginBloc(),
+                          child: const LoginScreen(),
+                        ),
+                      ),
+                    );
+                  },
+                  child: const Text("ok"))
+              : Container()
         ],
       );
       showDialog(
@@ -85,7 +87,7 @@ class _MenuHostState extends State<MenuHost> {
           centerTitle: true,
           actions: [
             IconButton(
-                onPressed: () => {showDialogResult(context, "Logout ?")},
+                onPressed: () => {showDialogResult(context, "Logout ?", true)},
                 icon: Icon(Icons.logout))
           ],
         ),
@@ -336,8 +338,14 @@ class _MenuHostState extends State<MenuHost> {
                                 ),
                                 child: const Text("OK"),
                                 onPressed: () {
-                                  employeeBloc.add(EmployeeHostMenu(
-                                      restaurantID: restaurantID));
+                                  if (restaurantID == '') {
+                                    showDialogResult(
+                                        context, "choose restaurant !", false);
+                                  } else {
+                                    employeeBloc.add(EmployeeHostMenu(
+                                        restaurantID: restaurantID));
+                                    restaurantID = '';
+                                  }
                                 },
                               ),
                             ),
@@ -459,8 +467,14 @@ class _MenuHostState extends State<MenuHost> {
                                 ),
                                 child: const Text("OK"),
                                 onPressed: () {
-                                  menuBloc.add(MenuMaterialHost(
-                                      RestaurantID: restaurantID));
+                                  if (restaurantID == '') {
+                                    showDialogResult(
+                                        context, "choose restaurant !", false);
+                                  } else {
+                                    menuBloc.add(MenuMaterialHost(
+                                        RestaurantID: restaurantID));
+                                    restaurantID = '';
+                                  }
                                 },
                               ),
                             ),

@@ -47,6 +47,16 @@ class _ProductScreenState extends State<ProductScreen> {
       appBar: AppBar(
         title: const Text("Product"),
         centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  log("ok");
+                  productBloc.add(ProductFetch());
+                });
+              },
+              icon: Icon(Icons.refresh))
+        ],
       ),
       body: Container(
           padding: EdgeInsets.all(10),

@@ -108,9 +108,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   child: OutlinedButton(
                       onPressed: () => {
-                            loginBloc.add(LoginEvent(
-                                phoneNumber: _phoneNumber,
-                                passWord: _password)),
+                            if (_phoneNumber.length != 10 ||
+                                _password.length < 8)
+                              {
+                                showDialogResult(context,
+                                    "please check your phone and password")
+                              }
+                            else
+                              {
+                                loginBloc.add(LoginEvent(
+                                    phoneNumber: _phoneNumber,
+                                    passWord: _password)),
+                              }
                           },
                       child: const Text("Login")),
                 ),
