@@ -41,7 +41,7 @@ class _EmployeeEditState extends State<EmployeeEdit> {
             const SizedBox(
               height: 5,
             ),
-            Text(widget.data['phone'].toString(),
+            Text("   0" + widget.data['phone'].toString(),
                 style: TextStyle(fontSize: 15)),
             const SizedBox(
               height: 10,
@@ -53,7 +53,7 @@ class _EmployeeEditState extends State<EmployeeEdit> {
             const SizedBox(
               height: 5,
             ),
-            Text(widget.data['name'], style: TextStyle(fontSize: 15)),
+            Text("   " + widget.data['name'], style: TextStyle(fontSize: 15)),
             const SizedBox(
               height: 10,
             ),
@@ -115,11 +115,15 @@ class _EmployeeEditState extends State<EmployeeEdit> {
                     ),
                     child: const Text("Change Password"),
                     onPressed: () {
-                      var params = {
-                        "_id": widget.data['_id'],
-                        "password": newPassWord
-                      };
-                      employeeBloc.add(EmployeeEditPass(params: params));
+                      if (newPassWord.length < 8) {
+                        showDialogResult(context, "length's password > 8 !");
+                      } else {
+                        var params = {
+                          "_id": widget.data['_id'],
+                          "password": newPassWord
+                        };
+                        employeeBloc.add(EmployeeEditPass(params: params));
+                      }
                     },
                   ),
                 ],
