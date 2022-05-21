@@ -262,9 +262,7 @@ class _AddProductsState extends State<AddProducts> {
                       OutlinedButton(
                         child: Text('create'),
                         onPressed: () {
-                          if (name == '' ||
-                              cost == '' ||
-                              !checkProductMaterial()) {
+                          if (name == '' || cost == '') {
                             showDialogResult(context, "check name and cost");
                           } else {
                             var params = {
