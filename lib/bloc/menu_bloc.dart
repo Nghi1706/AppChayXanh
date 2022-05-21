@@ -23,7 +23,7 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
         String restaurantID = prefs.getString(idRestaurant).toString();
         String roleLoged = prefs.getString(role).toString();
         if (roleLoged == "2") {
-          restaurantName = "Host is using this app";
+          restaurantName = "Host's Menu";
           restaurantAddress = "";
           listRestaurant = await CallAPI().Get(getListRestaurant, '');
           listRestaurant = json.decode(listRestaurant);
