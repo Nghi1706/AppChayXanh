@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:chayxanhapp/bloc/employee_bloc.dart';
 import 'package:chayxanhapp/bloc/menu_bloc.dart';
+import 'package:chayxanhapp/bloc/restaurant_bloc.dart';
 import 'package:chayxanhapp/screen/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -82,6 +83,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                       BlocProvider(
                                         create: (context) => EmployeeBloc(),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) => RestaurantBloc(),
                                       ),
                                     ],
                                     child: Menu(),
