@@ -99,41 +99,41 @@ class _MenuHostState extends State<MenuHost> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Row(
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width * 1,
-                  padding: const EdgeInsets.all(20),
-                  child: Text(
-                    widget.restaurantAddress,
-                    style: const TextStyle(
-                        fontSize: 20,
-                        fontStyle: FontStyle.italic,
-                        color: Colors.green,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width * 1,
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-                  child: Text(
-                    widget.restaurantUser,
-                    textAlign: TextAlign.right,
-                    style: const TextStyle(
-                        fontStyle: FontStyle.italic,
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  decoration: const BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(width: 2, color: Colors.green))),
-                ),
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     Container(
+            //       width: MediaQuery.of(context).size.width * 1,
+            //       padding: const EdgeInsets.all(20),
+            //       child: Text(
+            //         widget.restaurantAddress,
+            //         style: const TextStyle(
+            //             fontSize: 20,
+            //             fontStyle: FontStyle.italic,
+            //             color: Colors.green,
+            //             fontWeight: FontWeight.w500),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            // Row(
+            //   children: [
+            //     Container(
+            //       width: MediaQuery.of(context).size.width * 1,
+            //       padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+            //       child: Text(
+            //         widget.restaurantUser,
+            //         textAlign: TextAlign.right,
+            //         style: const TextStyle(
+            //             fontStyle: FontStyle.italic,
+            //             color: Colors.blue,
+            //             fontWeight: FontWeight.bold),
+            //       ),
+            //       decoration: const BoxDecoration(
+            //           border: Border(
+            //               bottom: BorderSide(width: 2, color: Colors.green))),
+            //     ),
+            //   ],
+            // ),
             Expanded(
                 child: GridView.count(
               crossAxisCount: 2,

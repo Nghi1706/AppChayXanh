@@ -44,6 +44,17 @@ class _CookingScreenState extends State<CookingScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Cooking"),
+        centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  log("ok");
+                  _datarestaurantBloc.add(DataCheck());
+                });
+              },
+              icon: Icon(Icons.refresh))
+        ],
       ),
       body: BlocBuilder<DatarestaurantBloc, DatarestaurantState>(
         bloc: _datarestaurantBloc,

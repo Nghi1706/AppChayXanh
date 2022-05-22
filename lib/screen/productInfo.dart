@@ -39,35 +39,50 @@ class _ProductInfoState extends State<ProductInfo> {
           title: const Text("Product infomation"),
           centerTitle: true,
         ),
-        body: BlocBuilder<ProductBloc, ProductState>(
-            bloc: productBloc,
-            builder: (context, state) {
-              if (state is ProductFetchMaterialState) {
-                data = state.data;
-                log(data.toString());
-                productName = data['Products']['name'];
-                cost = data['Products']['cost'];
-                status = int.parse(data['Products']['status']);
-                comment = data['Products']['comment'];
-                _id = data['Products']['Products'];
-                if (status == 1) {
-                  commentBy = 'Manager';
-                } else if (status == 2) {
-                  commentBy = 'Host';
-                }
-                for (var k = 0; k < data['Materials'].length; k++) {
-                  material.add(DataRow(cells: [
-                    DataCell(Text(data['Materials'][k]['name'])),
-                    DataCell(Text(data['Materials'][k]['value'])),
-                    DataCell(Text(data['Materials'][k]['unit'])),
-                  ]));
-                }
-              }
-              return (data != null)
-                  ? Container(
-                      padding: const EdgeInsets.all(10),
-                      child: SingleChildScrollView(
-                        child: Column(
+        body: Container(
+            padding: const EdgeInsets.all(10),
+            child: SingleChildScrollView(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                  BlocListener<ProductBloc, ProductState>(
+                    bloc: productBloc,
+                    listener: (context, state) {
+                      if (state is ProductFetching) {
+                        showLoaderDialog(context, "Waiting...");
+                      }
+                      if (state is ProductFetchMaterialState) {
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: Container(),
+                  ),
+                  BlocBuilder<ProductBloc, ProductState>(
+                      bloc: productBloc,
+                      builder: (context, state) {
+                        if (state is ProductFetchMaterialState) {
+                          data = state.data;
+                          log(data.toString());
+                          productName = data['Products']['name'];
+                          cost = data['Products']['cost'];
+                          status = int.parse(data['Products']['status']);
+                          comment = data['Products']['comment'];
+                          _id = data['Products']['Products'];
+                          if (status == 1) {
+                            commentBy = 'Manager';
+                          } else if (status == 2) {
+                            commentBy = 'Host';
+                          }
+                          for (var k = 0; k < data['Materials'].length; k++) {
+                            material.add(DataRow(cells: [
+                              DataCell(Text(data['Materials'][k]['name'])),
+                              DataCell(Text(data['Materials'][k]['value'])),
+                              DataCell(Text(data['Materials'][k]['unit'])),
+                            ]));
+                          }
+                        }
+                        return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -265,10 +280,9 @@ class _ProductInfoState extends State<ProductInfo> {
                                     child: const Text("Delete"))
                                 : Container()
                           ],
-                        ),
-                      ))
-                  : Container();
-            }));
+                        );
+                      })
+                ]))));
   }
 
   showLoaderDialog(BuildContext context, String data) {

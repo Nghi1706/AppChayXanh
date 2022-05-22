@@ -28,3 +28,5 @@ class DataUpdated extends DatarestaurantState {
 class DataUpdateFail extends DatarestaurantState {
   DataUpdateFail();
 }
+
+class DataLoading extends DatarestaurantState {}

@@ -32,6 +32,7 @@ class DatarestaurantBloc
         emit(DataRes(data: products));
       }
       if (event is DataCheckValue) {
+        emit(DataLoading());
         final prefs = await SharedPreferences.getInstance();
         restaurantID = prefs.getString(idRestaurant).toString();
         var productMaterial = await CallAPI()
@@ -57,6 +58,7 @@ class DatarestaurantBloc
             data: productMaterial, canCook: canCook, number: event.value));
       }
       if (event is DataUpdateValue) {
+        emit(DataUpdating());
         final prefs = await SharedPreferences.getInstance();
         restaurantID = prefs.getString(idRestaurant).toString();
         var mR = await CallAPI()

@@ -67,6 +67,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         }
       }
       if (event is ProductFetch) {
+        emit(ProductFetching());
         var product = await CallAPI().Get(getProducts, "");
         product = json.decode(product);
         var material = await CallAPI().Get(getMaterials, "");
@@ -74,6 +75,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         emit(ProductFetchState(product: product, material: material));
       }
       if (event is ProductFetchMaterial) {
+        emit(ProductFetching());
         var params = {"Products": event.idProduct};
         var res = await CallAPI().Get(getProductsMaterials, params);
         res = json.decode(res);

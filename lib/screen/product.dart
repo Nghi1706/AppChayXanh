@@ -43,6 +43,24 @@ class _ProductScreenState extends State<ProductScreen> {
       }
     }
 
+    showLoaderDialog(BuildContext context, String data) {
+      AlertDialog alert = AlertDialog(
+        content: new Row(
+          children: [
+            CircularProgressIndicator(),
+            Container(margin: EdgeInsets.only(left: 7), child: Text(data)),
+          ],
+        ),
+      );
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Product"),
@@ -62,6 +80,18 @@ class _ProductScreenState extends State<ProductScreen> {
           padding: EdgeInsets.all(10),
           child: Column(
             children: [
+              BlocListener<ProductBloc, ProductState>(
+                bloc: productBloc,
+                listener: (context, state) {
+                  if (state is ProductFetching) {
+                    showLoaderDialog(context, "Waiting...");
+                  }
+                  if (state is ProductFetchState) {
+                    Navigator.pop(context);
+                  }
+                },
+                child: Container(),
+              ),
               Expanded(
                   child: BlocBuilder<ProductBloc, ProductState>(
                       bloc: productBloc,
