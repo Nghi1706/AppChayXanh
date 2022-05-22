@@ -4,6 +4,8 @@ class MaterialsState {}
 
 class MaterialInitial extends MaterialsState {}
 
+class MaterialLoading extends MaterialsState {}
+
 class AllMaterialScreen extends MaterialsState {
   final bool isMaterialAll;
   final bool isMaterialRestaurant;

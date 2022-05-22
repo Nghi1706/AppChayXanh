@@ -20,6 +20,7 @@ class MaterialBloc extends Bloc<MaterialEvent, MaterialsState> {
   MaterialBloc() : super(MaterialInitial()) {
     on<MaterialEvent>((event, emit) async {
       if (event is MaterialCheckEvent) {
+        emit(MaterialLoading());
         final prefs = await SharedPreferences.getInstance();
         String roleSaved = prefs.getString(role).toString();
         int role_use = int.parse(roleSaved);

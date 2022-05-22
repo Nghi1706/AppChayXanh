@@ -56,6 +56,24 @@ class _MaterialCEDState extends State<MaterialCED> {
 
   @override
   Widget build(BuildContext context) {
+    showLoaderDialog(BuildContext context, String data) {
+      AlertDialog alert = AlertDialog(
+        content: new Row(
+          children: [
+            CircularProgressIndicator(),
+            Container(margin: EdgeInsets.only(left: 7), child: Text(data)),
+          ],
+        ),
+      );
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
+    }
+
     bool isMaterialAll = widget.isMaterialAll;
     bool isMaterialrestaurant = widget.isMaterialRestaurant;
     int role = 0;
@@ -84,6 +102,17 @@ class _MaterialCEDState extends State<MaterialCED> {
             ? Container(
                 padding: EdgeInsets.all(10),
                 child: Column(children: [
+                  BlocListener<MaterialBloc, MaterialsState>(
+                      bloc: materialBloc,
+                      listener: (context, state) {
+                        if (state is MaterialLoading) {
+                          showLoaderDialog(context, "Waiting !");
+                        }
+                        if (state is AllMaterialScreen) {
+                          Navigator.pop(context);
+                        }
+                      },
+                      child: Container()),
                   Expanded(
                     child: BlocBuilder<MaterialBloc, MaterialsState>(
                       bloc: materialBloc,
@@ -462,167 +491,161 @@ class _MaterialCEDState extends State<MaterialCED> {
             // material restaurant
             : Container(
                 padding: EdgeInsets.all(10),
-                child: BlocBuilder<MaterialBloc, MaterialsState>(
-                  bloc: materialBloc,
-                  builder: (context, state) {
-                    if (state is RestaurantMaterialScreen) {
-                      material = state.material;
-                      role = state.role;
-                    }
-                    return ListView.builder(
-                      itemCount: material.length,
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          child: Card(
-                            child: ListTile(
-                              leading:
-                                  Text(material[index]['Materials']['name']),
-                              trailing: Text(
-                                  material[index]['available_new'].toString() +
-                                      " " +
-                                      material[index]['Materials']['unit']),
-                            ),
-                          ),
-                          onTap: () {
-                            restaurantMaterialName =
-                                material[index]['Materials']['name'];
-                            restaurantMaterialID = material[index]['_id'];
-                            restaurantMaterialNewAvailable =
-                                material[index]['available_new'] / 1;
-                            restaurantMaterialOldAvailable =
-                                material[index]['available_old'] / 1;
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return BlocBuilder<MaterialBloc,
-                                        MaterialsState>(
-                                    bloc: materialBloc,
-                                    builder: (context, state) {
-                                      if (state
-                                          is RestaurantMaterialDeleteState) {
-                                        materialEditStatus = state.message;
-                                      }
-                                      if (state
-                                          is RestaurantMaterialUpdateToRestaurantState) {
-                                        materialEditStatus = state.message;
-                                      }
-                                      return AlertDialog(
-                                        shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20))),
-                                        title: Text(materialEditStatus),
-                                        content: SingleChildScrollView(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              const SizedBox(
-                                                height: 5,
-                                              ),
-                                              // const Text("Pin :"),
-                                              // Text(restaurantMaterialID),
-                                              // const SizedBox(
-                                              //   height: 10,
-                                              // ),
-                                              const SizedBox(
-                                                height: 5,
-                                              ),
-                                              Text("Name : " +
-                                                  restaurantMaterialName),
-                                              const SizedBox(
-                                                height: 10,
-                                              ),
-                                              const SizedBox(
-                                                height: 5,
-                                              ),
-                                              Text("Type : " +
-                                                  material[index]['Materials']
-                                                      ['type']),
-                                              const SizedBox(
-                                                height: 10,
-                                              ),
-                                              const SizedBox(
-                                                height: 5,
-                                              ),
-                                              Text("available : " +
-                                                  material[index]
-                                                          ['available_new']
-                                                      .toString() +
-                                                  " " +
-                                                  material[index]['Materials']
-                                                      ['unit']),
-                                              const SizedBox(
-                                                height: 10,
-                                              ),
-                                              TextField(
-                                                decoration: new InputDecoration(
-                                                    labelText: "Available"),
-                                                keyboardType: TextInputType
-                                                    .numberWithOptions(
-                                                        decimal: true),
-                                                inputFormatters: <
-                                                    TextInputFormatter>[
-                                                  FilteringTextInputFormatter
-                                                      .singleLineFormatter
-                                                ],
-                                                onChanged: (value) => {
-                                                  if (value.length == 0)
-                                                    {
-                                                      restaurantMaterialEditAvailable =
-                                                          0.0
-                                                    }
-                                                  else
-                                                    {
-                                                      restaurantMaterialEditAvailable =
-                                                          double.parse(value),
-                                                    }
-                                                }, // Only numbers can be entered
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        actionsOverflowButtonSpacing: 20,
-                                        actions: [
-                                          ElevatedButton(
-                                            style: ButtonStyle(
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      Color.fromARGB(
-                                                          255, 248, 54, 40)),
-                                              shape: MaterialStateProperty.all(
+                child: Column(
+                  children: [
+                    BlocListener<MaterialBloc, MaterialsState>(
+                        bloc: materialBloc,
+                        listener: (context, state) {
+                          if (state is MaterialLoading) {
+                            showLoaderDialog(context, "Waiting !");
+                          }
+                          if (state is RestaurantMaterialScreen) {
+                            Navigator.pop(context);
+                          }
+                        },
+                        child: Container()),
+                    Expanded(
+                      child: BlocBuilder<MaterialBloc, MaterialsState>(
+                        bloc: materialBloc,
+                        builder: (context, state) {
+                          if (state is RestaurantMaterialScreen) {
+                            material = state.material;
+                            role = state.role;
+                          }
+                          return ListView.builder(
+                            itemCount: material.length,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                child: Card(
+                                  child: ListTile(
+                                    leading: Text(
+                                        material[index]['Materials']['name']),
+                                    trailing: Text(material[index]
+                                                ['available_new']
+                                            .toStringAsFixed(2) +
+                                        " " +
+                                        material[index]['Materials']['unit']),
+                                  ),
+                                ),
+                                onTap: () {
+                                  restaurantMaterialName =
+                                      material[index]['Materials']['name'];
+                                  restaurantMaterialID = material[index]['_id'];
+                                  restaurantMaterialNewAvailable =
+                                      material[index]['available_new'] / 1;
+                                  restaurantMaterialOldAvailable =
+                                      material[index]['available_old'] / 1;
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return BlocBuilder<MaterialBloc,
+                                              MaterialsState>(
+                                          bloc: materialBloc,
+                                          builder: (context, state) {
+                                            if (state
+                                                is RestaurantMaterialDeleteState) {
+                                              materialEditStatus =
+                                                  state.message;
+                                            }
+                                            if (state
+                                                is RestaurantMaterialUpdateToRestaurantState) {
+                                              materialEditStatus =
+                                                  state.message;
+                                            }
+                                            return AlertDialog(
+                                              shape:
                                                   const RoundedRectangleBorder(
                                                       borderRadius:
                                                           BorderRadius.all(
                                                               Radius.circular(
-                                                                  20)))),
-                                            ),
-                                            child: const Text("Delete"),
-                                            onPressed: () {
-                                              materialBloc.add(
-                                                  RestaurantMaterialDelete(
-                                                      materialId:
-                                                          restaurantMaterialID));
-                                              setState(() {
-                                                materialBloc
-                                                    .add(MaterialCheckEvent(
-                                                  isMaterialAll:
-                                                      widget.isMaterialAll,
-                                                  isMaterialRestaurant: widget
-                                                      .isMaterialRestaurant,
-                                                ));
-                                              });
-                                            },
-                                          ),
-                                          role == 2
-                                              ? ElevatedButton(
+                                                                  20))),
+                                              title: Text(materialEditStatus),
+                                              content: SingleChildScrollView(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    const SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    // const Text("Pin :"),
+                                                    // Text(restaurantMaterialID),
+                                                    // const SizedBox(
+                                                    //   height: 10,
+                                                    // ),
+                                                    const SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    Text("Name : " +
+                                                        restaurantMaterialName),
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    Text("Type : " +
+                                                        material[index]
+                                                                ['Materials']
+                                                            ['type']),
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    Text("available : " +
+                                                        material[index][
+                                                                'available_new']
+                                                            .toString() +
+                                                        " " +
+                                                        material[index]
+                                                                ['Materials']
+                                                            ['unit']),
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    TextField(
+                                                      decoration:
+                                                          new InputDecoration(
+                                                              labelText:
+                                                                  "Available"),
+                                                      keyboardType: TextInputType
+                                                          .numberWithOptions(
+                                                              decimal: true),
+                                                      inputFormatters: <
+                                                          TextInputFormatter>[
+                                                        FilteringTextInputFormatter
+                                                            .singleLineFormatter
+                                                      ],
+                                                      onChanged: (value) => {
+                                                        if (value.length == 0)
+                                                          {
+                                                            restaurantMaterialEditAvailable =
+                                                                0.0
+                                                          }
+                                                        else
+                                                          {
+                                                            restaurantMaterialEditAvailable =
+                                                                double.parse(
+                                                                    value),
+                                                          }
+                                                      }, // Only numbers can be entered
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              actionsOverflowButtonSpacing: 20,
+                                              actions: [
+                                                ElevatedButton(
                                                   style: ButtonStyle(
                                                     backgroundColor:
                                                         MaterialStateProperty
                                                             .all(Color.fromARGB(
                                                                 255,
-                                                                28,
-                                                                101,
-                                                                161)),
+                                                                248,
+                                                                54,
+                                                                40)),
                                                     shape: MaterialStateProperty.all(
                                                         const RoundedRectangleBorder(
                                                             borderRadius:
@@ -630,72 +653,112 @@ class _MaterialCEDState extends State<MaterialCED> {
                                                                     Radius.circular(
                                                                         20)))),
                                                   ),
-                                                  child: const Text("Transfer"),
+                                                  child: const Text("Delete"),
                                                   onPressed: () {
-                                                    // materialBloc.add(
-                                                    //     MaterialDelete(
-                                                    //         materialId:
-                                                    //             materialID));
-                                                    // setState(() {
-                                                    //   materialBloc.add(
-                                                    //       MaterialCheckEvent(
-                                                    //     isMaterialAll: widget
-                                                    //         .isMaterialAll,
-                                                    //     isMaterialRestaurant: widget
-                                                    //         .isMaterialRestaurant,
-                                                    //   ));
-                                                    // });
+                                                    materialBloc.add(
+                                                        RestaurantMaterialDelete(
+                                                            materialId:
+                                                                restaurantMaterialID));
+                                                    setState(() {
+                                                      materialBloc.add(
+                                                          MaterialCheckEvent(
+                                                        isMaterialAll: widget
+                                                            .isMaterialAll,
+                                                        isMaterialRestaurant: widget
+                                                            .isMaterialRestaurant,
+                                                      ));
+                                                    });
                                                   },
-                                                )
-                                              : Text(""),
-                                          ElevatedButton(
-                                            style: ButtonStyle(
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      Colors.green),
-                                              shape: MaterialStateProperty.all(
-                                                  const RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  20)))),
-                                            ),
-                                            child: const Text("Update"),
-                                            onPressed: () {
-                                              if (restaurantMaterialEditAvailable ==
-                                                  null) {
-                                                showDialogResult(
-                                                    context, "check value");
-                                              } else {
-                                                materialBloc.add(RestaurantMaterialUpdate(
-                                                    restaurantMaterialId:
-                                                        restaurantMaterialID,
-                                                    restaurantMaterialOldAvailable:
-                                                        restaurantMaterialNewAvailable,
-                                                    restaurantMaterialNewAvailable:
-                                                        restaurantMaterialEditAvailable));
-                                                setState(() {
-                                                  materialBloc
-                                                      .add(MaterialCheckEvent(
-                                                    isMaterialAll:
-                                                        widget.isMaterialAll,
-                                                    isMaterialRestaurant: widget
-                                                        .isMaterialRestaurant,
-                                                  ));
-                                                });
-                                              }
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    });
-                              },
-                            );
-                          },
-                        );
-                      },
-                    );
-                  },
+                                                ),
+                                                role == 2
+                                                    ? ElevatedButton(
+                                                        style: ButtonStyle(
+                                                          backgroundColor:
+                                                              MaterialStateProperty
+                                                                  .all(Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          28,
+                                                                          101,
+                                                                          161)),
+                                                          shape: MaterialStateProperty.all(
+                                                              const RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                          Radius.circular(
+                                                                              20)))),
+                                                        ),
+                                                        child: const Text(
+                                                            "Transfer"),
+                                                        onPressed: () {
+                                                          // materialBloc.add(
+                                                          //     MaterialDelete(
+                                                          //         materialId:
+                                                          //             materialID));
+                                                          // setState(() {
+                                                          //   materialBloc.add(
+                                                          //       MaterialCheckEvent(
+                                                          //     isMaterialAll: widget
+                                                          //         .isMaterialAll,
+                                                          //     isMaterialRestaurant: widget
+                                                          //         .isMaterialRestaurant,
+                                                          //   ));
+                                                          // });
+                                                        },
+                                                      )
+                                                    : Text(""),
+                                                ElevatedButton(
+                                                  style: ButtonStyle(
+                                                    backgroundColor:
+                                                        MaterialStateProperty
+                                                            .all(Colors.green),
+                                                    shape: MaterialStateProperty.all(
+                                                        const RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius.all(
+                                                                    Radius.circular(
+                                                                        20)))),
+                                                  ),
+                                                  child: const Text("Update"),
+                                                  onPressed: () {
+                                                    if (restaurantMaterialEditAvailable ==
+                                                        null) {
+                                                      showDialogResult(context,
+                                                          "check value");
+                                                    } else {
+                                                      materialBloc.add(RestaurantMaterialUpdate(
+                                                          restaurantMaterialId:
+                                                              restaurantMaterialID,
+                                                          restaurantMaterialOldAvailable:
+                                                              restaurantMaterialNewAvailable,
+                                                          restaurantMaterialNewAvailable:
+                                                              restaurantMaterialEditAvailable));
+                                                      setState(() {
+                                                        materialBloc.add(
+                                                            MaterialCheckEvent(
+                                                          isMaterialAll: widget
+                                                              .isMaterialAll,
+                                                          isMaterialRestaurant:
+                                                              widget
+                                                                  .isMaterialRestaurant,
+                                                        ));
+                                                      });
+                                                    }
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          });
+                                    },
+                                  );
+                                },
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    )
+                  ],
                 ),
               ));
   }
