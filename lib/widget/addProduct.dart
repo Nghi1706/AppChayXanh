@@ -49,24 +49,27 @@ class _AddProductsState extends State<AddProducts> {
     }
   }
 
-  checkProductMaterial() async {
+  checkProductMaterial() {
     if (productMaterial.length == 0) {
       return false;
-    } else
-      return true;
-    // try {
-    //   for (var l = 0; l < productMaterial.length; i++) {
-    //     productMaterial[l]['value'];
-    //     for (var k = l + 1; k < productMaterial.length; k++) {
-    //       if (productMaterial[l]['name'] == productMaterial[k]['name']) {
-    //         return false;
-    //       }
-    //     }
-    //   }
-    //   return true;
-    // } catch (error) {
-    //   return false;
-    // }
+    } else {
+      try {
+        for (var l = 0; l < productMaterial.length; l++) {
+          if (productMaterial[l]['value'] == null ||
+              productMaterial[l]['name'] == null) {
+            return false;
+          }
+          for (var k = l + 1; k < productMaterial.length; k++) {
+            if (productMaterial[l]['name'] == productMaterial[k]['name']) {
+              return false;
+            }
+          }
+        }
+        return true;
+      } catch (error) {
+        return false;
+      }
+    }
   }
 
   _dataSelection(value) {
@@ -262,8 +265,11 @@ class _AddProductsState extends State<AddProducts> {
                       OutlinedButton(
                         child: Text('create'),
                         onPressed: () {
-                          if (name == '' || cost == '') {
-                            showDialogResult(context, "check name and cost");
+                          if (name == '' ||
+                              cost == '' ||
+                              checkProductMaterial() == false) {
+                            showDialogResult(
+                                context, "check name, cost and material");
                           } else {
                             var params = {
                               "product": {
