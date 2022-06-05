@@ -53,8 +53,19 @@ class RestaurantMaterialUpdate extends MaterialEvent {
       required this.restaurantMaterialNewAvailable});
 }
 
+class RestaurantMaterialTransfer extends MaterialEvent {
+  final dataOld;
+  final dataNew;
+  RestaurantMaterialTransfer({required this.dataOld, required this.dataNew});
+}
+
 class RestaurantMaterialDelete extends MaterialEvent {
   final String materialId;
 
   RestaurantMaterialDelete({required this.materialId});
+}
+
+class FetchRestaurant extends MaterialEvent {
+  final String materialId;
+  FetchRestaurant({required this.materialId});
 }

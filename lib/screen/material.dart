@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:chayxanhapp/api/callAPI.dart';
+import 'package:chayxanhapp/screen/tranfer.dart';
 import 'package:chayxanhapp/widget/button_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -691,19 +692,23 @@ class _MaterialCEDState extends State<MaterialCED> {
                                                         child: const Text(
                                                             "Transfer"),
                                                         onPressed: () {
-                                                          // materialBloc.add(
-                                                          //     MaterialDelete(
-                                                          //         materialId:
-                                                          //             materialID));
-                                                          // setState(() {
-                                                          //   materialBloc.add(
-                                                          //       MaterialCheckEvent(
-                                                          //     isMaterialAll: widget
-                                                          //         .isMaterialAll,
-                                                          //     isMaterialRestaurant: widget
-                                                          //         .isMaterialRestaurant,
-                                                          //   ));
-                                                          // });
+                                                          Navigator.pop(
+                                                              context);
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute<
+                                                                void>(
+                                                              builder: (BuildContext
+                                                                      context) =>
+                                                                  BlocProvider(
+                                                                create: (context) =>
+                                                                    MaterialBloc(),
+                                                                child: Tranfer(
+                                                                    data: material[
+                                                                        index]),
+                                                              ),
+                                                            ),
+                                                          );
                                                         },
                                                       )
                                                     : Text(""),

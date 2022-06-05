@@ -61,3 +61,14 @@ class RestaurantMaterialUpdateToRestaurantState extends MaterialsState {
   final String message;
   RestaurantMaterialUpdateToRestaurantState({required this.message});
 }
+
+class Fetching extends MaterialsState {}
+
+class Fetched extends MaterialsState {}
+
+class Fail extends MaterialsState {}
+
+class ListData extends MaterialsState {
+  final List data;
+  ListData({required this.data});
+}

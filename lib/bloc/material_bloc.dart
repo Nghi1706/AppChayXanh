@@ -140,6 +140,25 @@ class MaterialBloc extends Bloc<MaterialEvent, MaterialsState> {
           emit(RestaurantMaterialDeleteState(message: "Delete fail !"));
         }
       }
+      if (event is FetchRestaurant) {
+        emit(Fetching());
+        log(event.materialId);
+        var listRestaurant = await CallAPI().Get(
+            getMaterialRestaurantByMaterialId, {"Materials": event.materialId});
+        log(listRestaurant.toString());
+        listRestaurant = json.decode(listRestaurant);
+        emit(ListData(data: listRestaurant));
+      }
+      if (event is RestaurantMaterialTransfer) {
+        emit(Fetching());
+        try {
+          await CallAPI().Put(updateMaterialsRestaurant, event.dataOld);
+          await CallAPI().Put(updateMaterialsRestaurant, event.dataNew);
+          emit(Fetched());
+        } catch (error) {
+          emit(Fail());
+        }
+      }
     });
   }
 }
